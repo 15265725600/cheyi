@@ -1,0 +1,401 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/amazeui.swiper.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<div class="container">
+    <!-- 个人信息 -->
+    <div class="logo-wrap am-margin-bottom" id="person-info">
+
+    </div>
+    <!-- 车辆信息 -->
+    <div class="base-wrap j-car" >
+        <div class="info-hd">
+          <a class="am-block" href="#">
+            <i class="icon-car"></i>车辆信息 
+            <span class="am-fr">&gt;</span>
+          </a>
+        </div>
+        <div id="car-list-now">
+            <div class="base-item"><span>鲁AS300V</span> <span> 银色</span>  <span>起亚赛拉图</span></div>
+            <div class="base-item">鲁AS300V  银色  起亚赛拉图</div>
+        </div>      
+    </div>
+    
+    <div class="base-wrap">
+        <ul class="am-avg-sm-4 info-nav active">
+            <li>
+                <a href="javascript:location.href=preUrl('my/money.html')">     
+                    <i class="icon-info-money"></i>   
+                    <span>我的钱包</span>   
+                </a>
+            </li>
+            <li>
+                <a href="javascript:location.href=preUrl('my/card.html')">
+                    <i class="icon-info-buy"></i>
+                    <span>充值卡购买</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:location.href=preUrl('my/score.html')"> 
+                    <i class="icon-info-score"></i>
+                    <span>我的积分</span>           
+                </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/collect.html')">
+                  <i class="icon-info-collect"></i>
+                  <span>我的收藏</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 天然气订单 -->
+    <div class="base-wrap">
+        <div class="info-hd">
+            <a class="am-block c-grey" href="javascript:location.href=preUrl('my/gas_order.html?status=0')">
+                <i class="icon-my-gas"></i>天然气订单 <span class="am-fr">&gt;</span>
+            </a>
+        </div>
+        <ul class="am-avg-sm-4 info-nav">
+            <li>
+                <a href="javascript:location.href=preUrl('my/gas_order.html?status=4')">       
+                    <span>待评价</span>   
+                </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/gas_order.html?status=0')" class="">
+                  <span>已完成</span>
+              </a>
+            </li>
+            <li>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 预约订单 -->
+    <div class="base-wrap">
+        <div class="info-hd">
+            <a class="am-block c-grey" href="javascript:location.href=preUrl('my/appoint_order.html?status=0')">
+                <i class="icon-my-appoint"></i>预约订单 <span class="am-fr">&gt;</span>
+            </a>
+        </div>
+        <ul class="am-avg-sm-4 info-nav">
+            <li>
+                <a href="javascript:location.href=preUrl('my/appoint_order.html?status=1')">       
+                    <span>待确认</span>   
+                </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/appoint_order.html?status=2')" class="">
+                  <span>待加气</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/appoint_order.html?status=4')" class="">
+                  <span>待评价</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/appoint_order.html?status=0')" class="">
+                  <span>已完成</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- 便利店订单 -->
+    <div class="base-wrap">
+        <div class="info-hd">
+            <a class="am-block c-grey" href="javascript:location.href=preUrl('my/store_order.html?status=0')">
+                <i class="icon-my-store"></i>便利店订单 <span class="am-fr">&gt;</span>
+            </a>
+        </div>
+        <ul class="am-avg-sm-4 info-nav">
+            <li>
+                <a href="javascript:location.href=preUrl('my/store_order.html?status=2')">       
+                    <span>待付款</span>   
+                </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/store_order.html?status=3')" class="">
+                  <span>待核销</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/store_order.html?status=4')" class="">
+                  <span>待评价</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/store_order.html?status=0')" class="">
+                  <span>已完成</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- 外卖预定订单 -->
+    <div class="base-wrap">
+        <div class="info-hd">
+            <a class="am-block c-grey" href="javascript:location.href=preUrl('my/sell_order.html?status=0')">
+                <i class="icon-my-sell"></i>外卖预定订单 <span class="am-fr">&gt;</span>
+            </a>
+        </div>
+        <ul class="am-avg-sm-4 info-nav">
+            <li>
+                <a href="javascript:location.href=preUrl('my/sell_order.html?status=2')">       
+                    <span>待付款</span>   
+                </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/sell_order.html?status=3')" class="">
+                  <span>待取餐</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/sell_order.html?status=4')" class="">
+                  <span>待评价</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/sell_order.html?status=0')" class="">
+                  <span>已完成</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="am-navbar sc-navbar am-cf" id="">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <li>
+              <a href="javascript:location.href=preUrl('index/index.html')" class="">     
+                  <i class="icon-home"></i>   
+                  <span>首页</span>   
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('near/near.html')" class="">
+                  <i class="icon-near"></i>
+                  <span>附近</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('find/find.html')" class="">        
+                  <i class="icon-find"></i>
+                  <span>发现</span>           
+              </a>
+            </li>
+            <li class="active">
+              <a href="javascript:location.href=preUrl('my/myinfo.html')" class="">
+                  <i class="icon-my active"></i>
+                  <span>我的</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- 绑定车辆信息modal -->
+    <div class="am-popup ly-popup" id="m-car">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd n-border"  style="z-index: 999; position: fixed;">
+                <div class="am-popup-hd n-border">
+                    <span data-am-modal-close class="am-close">&times;</span>
+                    <h1 class="popup-title">车辆绑定</h1>
+                    <a class="j-add" href="javascript:location.href=preUrl('index/car_add.html?type=1')">添加</a>
+                </div>
+            </div>
+            <div class="am-popup-bd am-padding-0">
+                 
+                <div id="car-list"></div>
+                
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/amazeui.swiper.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="myinfo-cont">   
+    <a class="icon-set" href="javascript:location.href=preUrl('my/set.html')"></a>
+    <div class="station-img" style="overflow: visible;">
+        <img class="avatar" src="{{img?img:'../assets/i/avatar.jpg'}}">
+        <!-- 等级 -->
+        {{if level=="1"}}
+            <i class="icon-silver"></i>
+        {{else if level=="2"}}
+            <i class="icon-gold"></i>
+        {{else if level=="3"}}
+            <i class="icon-jewel"></i>
+        {{/if}}
+    </div>
+    
+    <p class="user-type">
+      <a href="my_file.html">
+        <span>{{username}}</span>/
+        <span>{{type=="1"?"企业用户":"个人用户"}}</span>
+        <b class="am-fr" href="#">></b>
+      </a>
+    </p>  
+</script>
+
+<script type="text/html" id="car-item">
+    {{each listItems as value i}}
+        <div class="swiper-container " data="{{value.id}}">
+            <div class="swiper-wrapper base-wrap">
+                <div class="swiper-slide">
+                    <div class="base-item car-info">
+                        <div>车辆{{i+1}}：<span class="j-no">{{value.no}} </span></div>
+                        <div class="car-info-type"><span class="am-padding-right-sm j-color">{{value.color}}</span><span class="j-type">{{value.type}}</span></div>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="width: 80px;">
+                    <div class="del-btn"></div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/html" id="car-item-now">
+    {{each listItems as value i}}
+        <div class="base-item"><span>{{value.no}}</span> <span> {{value.color}}</span>  <span>{{value.type}}</span></div>
+    {{/each}}
+</script>
+
+
+
+
+<script type="text/javascript">
+$(function(){
+
+    var token = getCookie("token");
+
+    //用户信息
+    $.post( reqUrl('client_get'),{
+        token: token,
+    } ,function(data){
+        if(data.error_code == 200){
+            window.location.href = preUrl('login/login.html?path=my/myinfo.html');
+        }else if( data.error_code == 111 ){
+            //审核未通过需要重新提交认证信息
+        }
+        else if(data.success){
+            console.log(data.msg);
+            var html = template('myinfo-cont', data.infor[0]);
+            $('#person-info').html(html);
+            console.log(data.infor[0].username);
+        }
+
+    },'JSON');
+
+    //车辆列表
+    var token = getCookie("token");
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_list'),
+        dataType : "json",  
+        data: {
+            token: token
+        },
+        async: false,
+        success: function(data){
+            if(data.error_code == 200){
+              window.location.href = preUrl('login/login.html'+ para +'&path=my/myinfo.html');
+            }else if(data.success){
+                var html = template('car-item', data.infor);
+
+                var content = template('car-item-now', data.infor);
+                $('#car-list-now').html(content);
+                //车辆绑定modal
+                $('.j-car').on('click',function(){
+                    $('#m-car').modal();
+                    $('#car-list').html(html);
+
+                    var mySwiper = new Swiper('.swiper-container',{
+                        slidesPerView : 'auto',       
+                    });
+                    //删除按钮设置高度
+                    $('.swiper-container').each(function(){
+                        var h = $(this).find('.base-item').outerHeight();
+                        $(this).find('.del-btn').css('height',h+'px');
+                    });
+
+                    //车辆删除
+                    $('.del-btn').each(function(){
+                        console.log('ok');
+                        var that = $(this);
+                        that.on('click',function(){
+                            var id = $(this).parents('.swiper-container').attr('data');
+                            $.ajax({
+                                type: 'post',
+                                url: reqUrl('car_oper'),
+                                dataType : "json",  
+                                data: {
+                                    token: token,
+                                    id: id,
+                                    type: 1
+                                },
+                                success: function(data){
+                                    if(data.error_code == 200){
+                                       window.location.href = preUrl('login/login.html'+ para +'&path=index/pay.html');
+                                    }else if(data.success){
+                                       
+                                        mask('删除成功');
+                                        setTimeout(function(){
+                                            location.reload() ;
+                                        },1000);
+                                    }else{
+                                        mask(data.msg);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+   
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+
+});
+</script>
+</body>
+</html>

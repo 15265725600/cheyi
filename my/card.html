@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header "> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">充值卡购买</h1>
+</header>
+<div class="container">
+    <!-- 充值卡兑换 -->
+    <div>
+        <h2 class="base-title"><span class="base-title-cont">充值卡兑换</span></h2>
+        <ul class="am-avg-sm-2 card-wrap" id="card-list">
+            
+        </ul>
+    </div>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="card-item">
+    {{each listItems as value i}}
+        <li>
+            <div class="card-item">
+                <a class="am-block" href="javascript:location.href=preUrl('my/card_buy.html')+'?id='+{{value.id}}+'&price='+{{value.price}}">
+                    <!-- <div class="card-bg">{{value.cost}}</div> -->
+                    <img class="card-img" src="{{value.img}}">
+                    <p>{{value.name}}</p>
+                    <div class="am-text-default am-margin-bottom-sm">{{value.price}}积分</div>
+                </a>
+                <a href="javascript:location.href=preUrl('my/card_buy.html')+'?id='+{{value.id}}+'&price='+{{value.price}}" class="black-btn">购买</a>
+            </div>     
+        </li>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+$(function(){
+    
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('recharge_card_list'),
+        data:{
+            type: 1
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.error_code == 200){
+                window.location.href = preUrl('login/login.html?path=my/card.html');
+            }else if(data.success){
+                var content = template('card-item', data.infor);
+                $('#card-list').html(content);
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+});
+
+</script>
+</body>
+</html>

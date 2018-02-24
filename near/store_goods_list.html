@@ -1,0 +1,237 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">商品列表</h1>
+</header>
+<div class="container">
+    <ul class="am-avg-sm-2 news-nav">
+        <li>
+            <a class="j-sort" href="#"><span class="j-term j-term-sort" data="0">全部</span> <i class="caret-bottom" ></i></a>    
+            <ul class="sort-list op j-second-list">
+                <li><a href="#0">全部</a></li>
+            </ul>   
+            <!-- 遮罩 -->
+            <div class="mask op"></div>      
+        </li>
+        <li>
+            <a class="j-sort" href="#"><span class="j-term j-term-desc" data="0">综合</span> <i class="caret-bottom" ></i></a>       
+            <ul class="sort-list op">
+                <li><a href="#0">综合</a></li>
+                <li><a href="#1">销量最好</a></li>
+                <li><a href="#2">评价最好</a></li>
+                <li><a href="#3">价格最优</a></li>
+            </ul>
+            <!-- 遮罩 -->
+            <div class="mask op"></div> 
+        </li>
+    </ul>
+    
+
+    <!-- 商品列表 -->
+    <ul class="am-avg-sm-2 goods-wrap">
+        <!-- <li>
+            <a class="am-block goods-item" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                    <p><span>已售 <b>155</b></span> <span class="c-orange am-fr">库存 <b>500</b></span></p>
+                </div>
+                <div class="am-padding-xs">
+                    <h4 class="am-text-truncate">马瑞利SN级5w-40全合成汽车 机油发动</h4>
+                    <div class="am-text-default">50积分</div>
+                    <span class="am-text-xs c-grey">非浓缩</span>
+                </div>
+            </a>
+        </li> -->
+    </ul>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="second-sort">
+    {{each listItems as value i}}
+        <li><a href="#{{value.id}}">{{value.name}}</a></li>
+    {{/each}}
+</script>
+
+<script type="text/html" id="goods-item">
+    {{each listItems as goods i}}
+        <li>
+            <a class="am-block goods-item" href="javascript:location.href=preUrl('near/store_goods_detail.html?id={{goods.id}}')">
+                <div class="station-img">
+                    <img src="{{goods.img}}">
+                    <p><span>已售 <b>{{goods.sales}}</b></span> <span class="c-orange am-fr">库存 <b>{{goods.count}}</b></span></p>
+                </div>
+                <div class="am-padding-xs">
+                    <h4 class="am-text-truncate">{{goods.goods_name}}</h4>
+                    <div class="am-text-default">￥{{goods.price}}</div>
+                    <span class="am-text-xs c-grey">{{goods.property}}</span>
+                </div>
+            </a>
+        </li>
+    {{/each}}
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+    //设置mask高度
+    $('body').height($(window).height());
+
+    //显示遮罩
+    $('.j-sort').on('click',function(){
+        $('.j-sort').parent().css('backgroundColor','#000');
+        $('.sort-list').addClass('op');
+        $('.mask').addClass('op');
+        $(this).siblings('.mask').removeClass('op');
+        $(this).next().removeClass('op');
+        $(this).parent().css('backgroundColor','#f13d3e');
+    });
+
+    //点击遮罩透明部分关闭遮罩
+    $('.mask').on('click',function(){
+        $(this).addClass('op');
+        $(this).prev().addClass('op');
+        $('.j-sort').parent().css('backgroundColor','#000');
+        var data1 = $('.j-term-sort').attr('data');
+        var data2 = $('.j-term-desc').attr('data');
+        if(data1 == 0){
+            data1 = '';  
+        }
+        $('.dropload-down').remove();
+        goodsList(data2, data1);
+    });
+
+    //获取二级分类
+    $.ajax({
+        type: 'post',
+        url: reqUrl('goods_type'),
+        dataType : "json",  
+        data: {
+            parentid: 1,
+            level: 2
+        },
+        async: false,//同步
+        success: function(data){
+            if(data.success){
+                var content =  template('second-sort', data.infor);
+                $('.j-second-list').append(content);
+            }else{
+                mask(data.msg);
+            }
+            
+        }
+    });
+
+
+    $('.sort-list a').on('click',function(){
+        $(this).parents('.sort-list').addClass('op').next().addClass('op');
+        $('.j-sort').parent().css('backgroundColor','#000');
+        var text = $(this).html();
+        var data = $(this).attr('href').substring(1);
+
+        $(this).parents('li').find('.j-term').html(text).attr('data',data);
+        
+        var data1 = $('.j-term-sort').attr('data');
+        var data2 = $('.j-term-desc').attr('data');
+        if(data1 == 0){
+            data1 = '';  
+        }
+        $('.dropload-down').remove();
+        goodsList(data2, data1);
+    });
+
+    //获取商品列表
+    
+    goodsList(0, '');
+
+    function goodsList(sort, twoType){
+        var page = 0;
+        var $dropload = $('.container').dropload({
+            scrollArea: window,
+            domDown : {
+                domNoData  : '<div class="dropload-noData">没有更多</div>'
+            },
+            loadDownFn : function(me){
+                $.ajax({
+                    type: 'post',
+                    url: reqUrl('goods_list'),
+                    dataType : "json",  
+                    data: {
+                        station_id: GetQueryString('station_id'),
+                        is_promote: 0,
+                        sort: sort,
+                        one_type: GetQueryString('one_type'),
+                        two_type: twoType,
+                        page: page
+                    },
+                    async: false,//同步
+                    success: function(data){
+                        if(data.success){
+                            var html = '';
+                            page ++;
+                            var arrLen = data.infor.listItems.length;
+                            if(arrLen > 0){                                                
+                                //预编译模板
+                                html =  template('goods-item', data.infor);
+                                                
+                            }else{
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+
+                            if(page == 1){
+                                $('.goods-wrap').html(html);
+                            }else{
+                                $('.goods-wrap').append(html);
+                            }
+                            
+
+                            me.resetload();
+                        }else{
+                            mask(data.msg);
+                        }
+                    }
+                });
+            }  
+        });
+    }
+
+});
+</script>
+</body>
+</html>

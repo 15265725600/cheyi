@@ -1,0 +1,152 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">加油站列表</h1>
+</header>
+<div class="container">
+    <div class="station-wrap">
+        
+    </div>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script id="oil-item" type="text/html">
+    {{each listItems as value i}}
+        <div class="station-item">
+            <a class="am-block" href="javascript:location.href=preUrl('index/oil_station_detail.html')+'?id={{value.id}}&lng={{value.lng}}&lat={{value.lat}}'">
+                <div class="station-img">
+                    <img src="{{value.img?value.img:"../assets/i/c1.jpg"}}">
+                    <p>{{value.distance}}km</p>
+                    {{if value.disconunt =='1'}}
+                        <i class="icon-favor"></i>
+                    {{/if}}
+                </div>
+                <div class="station-cont">
+                    <h4 class="am-text-truncate">{{value.name}}</h4>
+                    <div class="am-text-default">{{value.price}}元/升</div>
+                    <div class="gas-type-wrap">
+                        {{if value.convenient_store=='1'}}
+                        <span class="gas-state">便利店</span> 
+                        {{/if}}
+                        {{if value.maintenance_point=='1'}}
+                            <span class="gas-state">维修点</span> 
+                        {{/if}}
+                        {{if value.status=='1'}}
+                            <span class="gas-state">营业</span>
+                        {{else}}
+                            <span class="gas-state active">停业</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </a>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+$(function(){
+
+    // //初始化地图
+    // var map = new AMap.Map('map', {
+    //     resizeEnable: true,    
+    //     zoom: 13
+    // });    
+    // //定位
+    // map.plugin('AMap.Geolocation', function() {
+    //     geolocation = new AMap.Geolocation({
+    //         enableHighAccuracy: true,//是否使用高精度定位，默认:true
+    //     });
+    //     map.addControl(geolocation);
+    //     geolocation.getCurrentPosition();
+    //     AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+    //     //AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    // });
+    // //定位成功完成时
+    // function onComplete(data) {
+    //     $.ajax({
+    //         type: 'post',
+    //         url: reqUrl('station_list'),
+    //         dataType : "json",  
+    //         data: {
+    //             type: 1,
+    //             lng: data.position.getLng(),
+    //             lat: data.position.getLat()
+    //         },
+    //         async : false ,
+    //         success: function(data){
+    //             if(data.success){
+    //                 var html = template('oil-item', data.infor);
+    //                 $('.station-wrap').html(html);
+                    
+    //             }else{
+    //                 mask(data.msg);
+    //             }    
+    //         },
+    //     });
+ 
+    // }
+
+    var position = JSON.parse(getInfo('position'));
+
+    $.ajax({
+        type: 'post',
+        url: reqUrl('station_list'),
+        dataType : "json",  
+        data: {
+            type: 1,
+            lng: position.lng,
+            lat: position.lat
+        },
+        async : false ,
+        success: function(data){
+            if(data.success){
+                var html = template('oil-item', data.infor);
+                $('.station-wrap').html(html);
+                
+            }else{
+                mask(data.msg);
+            }    
+        },
+    });
+    
+
+      
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">支付</h1>
+</header>
+<div class="container">
+    <form action="" class="am-form cy-form" method="post">
+        <div class="pay-score active">您需支付：￥<input type="text" id="pay-fee" /></div>
+
+        <!-- 选择支付方式 -->
+        <div class="pay-wrap">
+            <div class="pay-hd">请选择支付方式：</div>
+            <div class="base-wrap ">
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-yl.jpg" alt="银联支付">
+                    <div class="pay-way">
+                        <h4>银联支付</h4>
+                        <p class="am-margin-0">推荐银联储蓄用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+                <div class="base-item am-cf">
+                    <img src="../assets/i/pay-wx.jpg" alt="微信支付">
+                    <div class="pay-way">
+                        <h4>微信支付</h4>
+                        <p class="am-margin-0">推荐安装微信客户端用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" checked value="1" class="mt">
+                </div>
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-zfb.jpg" alt="支付宝支付">
+                    <div class="pay-way">
+                        <h4>支付宝支付</h4>
+                        <p class="am-margin-0">推荐安装支付宝客户端的用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+            </div>
+        </div>
+
+        <button class="am-btn j-pay">确定支付</button>
+    </form>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('.j-pay').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var price = $('#pay-fee').val();
+        if(isNaN(price)){
+            mask('请输入金额数字');
+            return;
+        }
+        //微信支付
+        window.location.href = preUrl('pay/wechat_pay.html?keytype=6&price='+ price +'&keyid=0');
+
+    });
+});
+</script>
+</body>
+</html>

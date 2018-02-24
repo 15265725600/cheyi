@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">加气站列表</h1>
+</header>
+<div class="container">
+    <!-- 加气站列表 -->
+    <div class="station-wrap" id="station-wrap">
+        
+    </div>
+</div>
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25"></script> 
+
+<script src="../assets/js/hm_cy.js"></script>
+
+<script id="gas-item" type="text/html">
+    {{each listItems as value i}}
+        <div class="station-item">
+            <a class="am-block" href="javascript:location.href=preUrl('index/gas_station_detail.html')+'?id={{value.id}}&lng={{value.lng}}&lat={{value.lat}}'">
+                <div class="station-img">
+                    <img src="{{value.img}}">
+                    <p>{{value.distance}}km</p>
+                    {{if value.disconunt =='1'}}
+                        <i class="icon-favor"></i>
+                    {{/if}}
+                </div>
+                <div class="station-cont">
+                    <h4 class="am-text-truncate">{{value.name}}</h4>
+                    <div class="star-wrap">
+                        <p class="am-cf am-margin-0">   
+                            <i class="icon-star {{1<=value.star_level?'active':''}}"></i>
+                            <i class="icon-star {{2<=value.star_level?'active':''}}"></i> 
+                            <i class="icon-star {{3<=value.star_level?'active':''}}"></i>
+                            <i class="icon-star {{4<=value.star_level?'active':''}}"></i>
+                            <i class="icon-star {{5<=value.star_level?'active':''}}"></i>              
+                        </p> 
+                    </div>
+                    <div class="am-text-default">{{value.price}}元/m³</div>
+                    <div class="am-margin-top-xs">
+                        {{each value.goods_name.split(',') as name i}}
+                        <span class="gas-type">{{name}}</span>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="am-padding-top-sm">
+                    {{if value.convenient_store=='1'}}
+                        <span class="gas-state">便利店</span> 
+                    {{/if}}
+                    {{if value.maintenance_point=='1'}}
+                        <span class="gas-state">维修点</span> 
+                    {{/if}}
+                    {{if value.status=='1'}}
+                        <span class="gas-state">营业</span>
+                    {{else}}
+                        <span class="gas-state active">停业</span>
+                    {{/if}}
+                </div>
+            </a>
+        </div>
+    {{/each}}
+</script>
+
+
+<script>
+$(function(){
+
+    var position = JSON.parse(getInfo('position'));
+   
+    $.ajax({
+        type: 'post',
+        url: reqUrl('station_list'),
+        dataType : "json",  
+        data: {
+            type: 0,
+            lng: position.lng,
+            lat: position.lat
+        },
+        async : false ,
+        success: function(data){
+            if(data.success){
+                var html = template('gas-item', data.infor);
+
+                $('#station-wrap').html(html);
+                
+                for(var i = 0; i<data.infor.listItems.length; i++){
+                  var content = '<div class="car-marker"> <span> '+ data.infor.listItems[i].distance +' </span></div';
+                  iconContent.push(content);
+
+                  var item = {
+                        content: iconContent[i],
+                        position: [data.infor.listItems[i].lng, data.infor.listItems[i].lat],
+                        map: map
+                  }
+                  markers.push(item);
+                }
+            }else{
+                mask(data.msg);
+            }    
+        },
+    });
+ 
+});
+</script>
+</body>
+</html>

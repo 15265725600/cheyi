@@ -1,0 +1,125 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <!-- <link rel="stylesheet" href="../assets/css/amazeui.switch.css"> -->
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">设置</h1>
+</header>
+
+<div class="container">
+
+    <div class="base-wrap">
+        <div class="base-item ">
+          <a class="am-block c-black" href="javascript:location.href=preUrl('my/set_login_psw.html')">
+            <span class="set-fl">修改登录密码</span> <span class="am-fr c-grey-light">></span>
+          </a>
+        </div>
+        <div class="base-item ">
+          <a class="am-block c-black" href="javascript:location.href=preUrl('my/set_pay_psw.html')">
+            <span class="set-fl">修改支付密码</span> <span class="am-fr c-grey-light">></span>
+          </a>
+        </div>
+        <div class="base-item ">
+          <a class="am-block c-black" href="javascript:location.href=preUrl('my/set_find_psw.html')">
+            <span class="set-fl">找回支付密码</span> <span class="am-fr c-grey-light">></span>
+          </a>
+        </div>
+    </div>
+
+    <div class="base-wrap">
+        <!-- <div class="base-item ">
+          <a class="am-block c-black j-clear" href="#">
+            <span class="set-fl">清除缓存</span> 
+            <b class="am-fr c-grey-light">10M</b>
+          </a>
+        </div> -->
+        <div class="base-item ">
+          <a class="am-block c-black" href="#">
+            <span class="set-fl">软件分享</span> <span class="am-fr c-grey-light">></span>
+          </a>
+        </div>
+        <div class="base-item ">
+          <a class="am-block c-black" href="http://124.128.23.74:8010/hmapi_cheyi/about.jsp">
+            <span class="set-fl">关于我们</span> <span class="am-fr c-grey-light">></span>
+          </a>
+        </div>
+<!--         <div class="base-item ">
+          <a class="am-block c-black" href="#">
+            <span class="set-fl">消息推送 </span>
+            <input type="checkbox" class="am-switch am-round am-switch-default" checked />
+          </a>
+        </div> -->
+    </div>
+    <div class="exit-wrap">
+        <a class="black-btn j-quit" href="#">退出当前账户</a>
+    </div>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<!-- <script src="../assets/js/amazeui.switch.js"></script> -->
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('.j-clear').on('click',function(){
+        var clear = parseInt( $(this).find('b').html() );
+        if(clear !== 0){
+            $(this).find('b').html(0);
+            mask('清除完毕');
+        }
+    });
+
+
+    $('.j-quit').on('click',function(){
+        console.log('ok');
+        var token = getCookie('token');
+        //退出登录
+        $.ajax({
+            type: 'POST',
+            url: reqUrl('client_loginout'),
+            data:{
+                token: token
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.success){
+                    window.location.href = preUrl('login/login.html');
+                }
+            }
+        });
+
+        return false;
+    });
+})
+</script>
+</body>
+</html>

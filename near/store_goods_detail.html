@@ -1,0 +1,224 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">商品详情</h1>
+</header>
+<div class="container">
+    
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="detail-cont">
+    <div class="goods-item am-margin-0">
+        <div class="station-img n-border">
+            <img style="height: 200px" src="{{img?img:"../assets/i/d1.jpg"}}">
+            <p><span>已售 <b>{{sales}}</b></span> <span class="c-orange am-padding-left">库存 <b>{{count}}</b></span></p>
+        </div>
+        <div class="am-margin-sm posr">
+            <h4 class="two-truncate">{{goods_name}}</h4>
+            <div class="am-text-default">￥{{price}}</div>
+            <span class="am-text-xs c-grey">{{property}}</span>
+            <a class="red-btn j-buy" href="#">立即购买</a>
+        </div>
+    </div>
+
+    <!-- 商品简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>商品简介：</h4>
+            <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=1&id={{id}}"></iframe>
+        </div>  
+    </div>
+    <!-- 评价 -->
+    <div>
+        <div class="info-hd">评价(<b>{{reviews}}</b>) <a class="am-fr c-grey-light" href="javascript:location.href=preUrl('near/comment_list.html?id={{id}}')">查看全部 ></a></div>
+        {{each reviews_list as review i}}
+            <div class="info-wrap">
+                <img src="{{review.client_img}}">
+                <div class="info-cont">
+                    <h2>{{review.client_name}} <time class="c-grey-light am-text-xs am-fr">{{review.createtime}}</time></h2>
+                    <div class="star-wrap">
+                        <p class="am-cf am-margin-0">
+                            <i class="icon-star {{1<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{2<=review.star?'active':''}}"></i> 
+                            <i class="icon-star {{3<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{4<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{5<=review.star?'active':''}}"></i>
+                        </p> 
+                    </div>
+                    <p>{{review.content}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+    <!-- 立即购买弹框 -->
+    <div class="am-modal-actions cy-actions buy-actions" id="m-buy">
+        <div class="am-modal-actions-group">
+            <div class="base-wrap order-wrap am-margin-0">
+                <div class="base-item am-cf">
+                    <a class="am-block" href="#">
+                        <div class="station-img">
+                            <img src="{{img?img:"../assets/i/d1.jpg"}}">
+                        </div>
+                        <div class="goods-item">
+                            <h4 class="am-text-truncate">{{goods_name}}</h4>
+                            <div class="am-text-default"><span>￥{{price}}</span> </div>
+                            <div class="am-margin-top-xs am-text-xs c-grey-light">{{property}}</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="am-padding">                   
+                    <div class="am-margin-bottom-xs">规格：</div>
+                    <div class="am-margin-bottom">
+                    {{each specification_list as spe i}}
+                        {{ if spe.count==0 }}
+                        <a class="spec disabled" href="#{{spe.id}}">{{spe.name}}</a> 
+                        {{else}}
+                        <a class="spec" href="#{{spe.id}}">{{spe.name}}</a> 
+                        {{/if}}
+                    {{/each}}
+                    </div>
+                 
+                    <div class="am-margin-bottom-xs">购买数量：</div>
+                    <div class="count-wrap am-cf">
+                        <span class="w-minus">-</span>
+                        <b class="j-count">1</b>
+                        <span class="w-add">+</span>
+                    </div>               
+                </div>
+            </div>
+        </div>
+        <div class="am-modal-actions-group">
+            <button class="am-btn am-btn-block j-submit">确定</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+$(function(){
+    var para = window.location.search;
+    var token = getCookie('token');
+
+    $.ajax({
+        type: 'post',
+        url: reqUrl('goods_detail'),
+        dataType : "json",  
+        data: {
+            id: GetQueryString('id'),
+        },
+        async: false,//同步
+        success: function(data){
+            if(data.success){
+                var html = template('detail-cont', data.infor[0]);
+                $('.container').html(html);
+
+                var specId ;//规格id
+
+                //购买modal
+                $('.j-buy').on('click',function(){
+                    $('#m-buy').modal();
+                });
+
+                //操作商品数量
+                $('.w-minus').on('click',function(){
+                    countOper('-',this);
+                });
+                $('.w-add').on('click',function(){
+                    console.log('ok');
+                    countOper('+',this);
+                }); 
+
+                //商品规格选中状态
+                $('.spec').on('click',function(){
+                    $('.spec').removeClass('active');
+                    $(this).addClass('active');
+                    specId = $(this).attr('href').substring(1);
+                });
+                
+
+                //购买提交
+                $('.j-submit').on('click',function(e){
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    if(typeof(specId) == "undefined"){
+                        mask('请选择规格');
+                        return;
+                    }
+
+                    console.log(specId);
+
+                    $.ajax({
+                        type: 'post',
+                        url: reqUrl('goods_order_add'),
+                        dataType : "json",  
+                        data: {
+                            token: token,
+                            type: 3,
+                            station_id: data.infor[0].station_id,
+                            count: $('.j-count').html(),
+                            goods_id: data.infor[0].id,
+                            spec_id: specId
+                        },
+                        async: false,//同步
+                        success: function(data){
+                            console.log(data.error_code);
+                            if(data.error_code == 200){
+                                window.location.href = preUrl('login/login.html'+ para +'&path=near/store_goods_detail.html');
+                            }else if(data.success){
+                                mask('购买成功');
+                                setTimeout(function(){
+                                    window.location.href = preUrl('my/store_order.html?status=0');
+                                },1000);
+                            }else{
+                                mask(data.msg);
+                            }
+                
+                        }
+                    });
+                });
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

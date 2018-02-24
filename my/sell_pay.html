@@ -1,0 +1,191 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">支付</h1>
+</header>
+<div class="container">
+    <form action="" class="am-form cy-form" method="post">
+        <div class="pay-score"></div>
+        <div class="base-wrap pay-wrap">
+            <div class="base-item am-cf">
+                <img src="../assets/i/pay-ye.jpg" alt="余额支付">
+                <div class="pay-way">
+                    <h4>余额支付</h4>
+                    <p class="am-margin-0" id="balance"></p>
+                </div>
+                <input type="radio" name="pay-way" value="1" class="mt" checked>
+            </div>
+        </div>
+        <!-- 选择支付方式 -->
+        <div class="pay-wrap">
+            <div class="pay-hd">请选择支付方式：</div>
+            <div class="base-wrap ">
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-yl.jpg" alt="银联支付">
+                    <div class="pay-way">
+                        <h4>银联支付</h4>
+                        <p class="am-margin-0">推荐银联储蓄用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+                <div class="base-item am-cf">
+                    <img src="../assets/i/pay-wx.jpg" alt="微信支付">
+                    <div class="pay-way">
+                        <h4>微信支付</h4>
+                        <p class="am-margin-0">推荐安装微信客户端用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" value="2" class="mt">
+                </div>
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-zfb.jpg" alt="支付宝支付">
+                    <div class="pay-way">
+                        <h4>支付宝支付</h4>
+                        <p class="am-margin-0">推荐安装支付宝客户端的用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+            </div>
+        </div>
+
+        <button class="am-btn" id="j-pay">确定支付</button>
+    </form>
+    
+    <!-- 支付密码modal -->
+    <div class="am-modal am-modal-alert xp-modal" tabindex="-1" id="m-pay">
+        <div class="am-modal-dialog">
+            <form class="am-form" method="post" action="">
+                <div class="am-modal-hd posr" id="modal-pay">
+                    
+                </div>
+                <div class="am-modal-bd">
+                    <div class="am-form-group">
+                        <input type="password" id="psw" placeholder="请输入支付密码" />
+                    </div>
+                </div>
+                <div class="am-modal-footer">
+                  <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+                </div>
+            </form>
+        </div> 
+    </div>
+    
+    
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/javascript">
+$(function(){
+    console.log(GetQueryString('price'));
+    var content = '您需支付：￥<span>'+ GetQueryString('price') +'</span>';
+    $('.pay-score').html( content );
+    $('#modal-pay').html( content );
+
+    
+    //取得余额的值
+    var token = getCookie("token");
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('client_get'),
+        data:{
+            token: token
+        },
+        dataType: 'json',
+        success: function(data){
+            console.log(data.msg);
+            if(data.error_code == 200){
+                window.location.href = preUrl('login/login.html?path=my/sell_pay.html');
+            }else if(data.success){
+                var content = '余额<span class="c-red">￥'+ data.infor[0].balance +'</span>';
+                $('#balance').html(content);
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    $('#j-pay').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var paytype = $('input:radio[name="pay-way"]:checked').val();
+
+        if(!paytype){
+            mask('请选择支付方式');
+        }else if(paytype == 1){
+            //余额支付
+            $('#m-pay').modal({
+                onConfirm: function(){
+                    var token = getCookie("token");
+                    var psw = hex_md5('cb08bd3a57be55c375040ec59f343e8e' + hex_md5($("#psw").val()));
+                    if( psw=="" ){
+                        mask('支付宝密码不能为空');
+                        return;
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: reqUrl('yuepay'),
+                        data:{
+                            token: token,
+                            keytype: 4,
+                            keyid: GetQueryString('orderid'),
+                            price: GetQueryString('price'),
+                            paypassword: psw
+                        },
+                        dataType: 'json',
+                        async : false ,
+                        success: function(data){
+                            if(data.success){
+                                mask('支付成功');
+                                setTimeout(function(){
+                                     window.location.href = preUrl('my/sell_order.html?status=0');
+                                }, 1000);
+                            }else{
+                                mask(data.msg);
+                            }
+                        }
+                    });
+                }
+            });  
+        }else if(paytype == 2){
+            //微信支付
+            window.location.href = preUrl('pay/wechat_pay.html?keytype=4&price='+ GetQueryString('price') +'&keyid=' + GetQueryString('orderid'));
+        }
+
+    });
+    
+});
+</script>
+</body>
+</html>

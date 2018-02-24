@@ -1,0 +1,276 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">保险公司详情</h1>
+</header>
+<div class="container">
+    <div class="detail-wrap">
+        
+    </div>
+
+    <form action="" method="post" class="am-form cy-form">
+        <div class="am-form-group am-cf" id="chose">
+            <label>选择城市</label>
+            <span class="am-fr c-grey-light"><span id="j-city">请选择城市</span> > </span>
+        </div>
+        <div class="am-form-group">
+            <label for="no">车牌号</label>
+            <input type="text" id="no" placeholder="请填写车牌号"/>
+        </div>
+        <div class="am-form-group">
+            <label for="name">车主姓名</label>
+            <input type="text" id="name" placeholder="请填写车主姓名" />
+        </div>
+        <div class="am-form-group">
+            <label class="phone">联系电话</label>
+            <input type="text" id="phone" placeholder="请填写联系电话" />
+        </div>
+
+        <button class="am-btn j-submit">提交</button>
+    </form>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="detail-cont">
+    <div>
+        <img style="width: 100%; height: 200px;" src="{{img?img:'../assets/i/d1.jpg'}}">
+        <div class="secure-name">{{name}}</div>
+    </div>
+    <!-- 公司简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>公司简介：</h4>
+            <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=4&id={{id}}"></iframe>
+        </div>  
+    </div>
+    
+    <div class="base-wrap">
+        <div class="base-item">
+            <a class="am-block" href="tel:{{phone}}">
+                <i class="icon-phone"></i>
+                <span>{{phone}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+$(function(){
+    //商品详情
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('insurer_detail'),
+        data:{
+            id: GetQueryString('id')
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.success){
+                var html = template('detail-cont', data.infor[0]);
+                $('.detail-wrap').html(html);
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+
+    //获取城市列表
+    var city = [];
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("district_all_get"),
+        dataType: 'JSON',
+        async: false,
+        success:  function(data) {
+            console.log(data.msg);
+            city = data.infor.listItems;
+        }
+    });
+
+
+    //城市选择
+    var cityId = [];
+    var nameEl = document.getElementById('chose');
+    var jcity = document.getElementById('j-city');
+
+    var first = []; /* 省，直辖市 */
+    var second = []; /* 市 */
+    var third = []; /* 镇 */
+
+    var checked = [0, 0, 0]; /* 已选选项 */
+
+    function creatList(obj, list){
+        obj.forEach(function(item, index, arr){
+            var temp = new Object();
+            temp.text = item.name;
+            temp.value = item.id;
+            list.push(temp);
+        })
+    }
+
+    creatList(city, first); // 省
+
+    if (city[0].hasOwnProperty('children')) {
+        creatList(city[0].children, second);//市
+    } else {
+      second = [{text: '', value: 0}];
+    }
+
+
+    if (city[0].children[0].hasOwnProperty('children')) {
+      creatList(city[0].children[0].children, third);//区
+    } else {
+      third = [{text: '', value: 0}];
+    }
+
+
+    var picker = new Picker({
+        data: [first, second, third],
+        selectedIndex: [0, 0, 0],
+        title: ''
+    });
+
+    picker.on('picker.select', function (selectedVal, selectedIndex) {
+      var text1 = first[selectedIndex[0]].text;
+      var text2 = second[selectedIndex[1]].text;
+      var text3 = third[selectedIndex[2]] ? third[selectedIndex[2]].text : '';
+
+      jcity.innerHTML = text1 + ' ' + text2 + ' ' + text3;
+    });
+
+    picker.on('picker.change', function (index, selectedIndex) {
+      if (index === 0){
+          firstChange();
+      } else if (index === 1) {
+          secondChange();
+      }
+
+      function firstChange() {
+          second = [];
+          third = [];
+          checked[0] = selectedIndex;
+          var firstCity = city[selectedIndex];
+          if (firstCity.hasOwnProperty('children')) {
+            creatList(firstCity.children, second);
+            
+            var secondCity = city[selectedIndex].children[0]
+            if (secondCity.hasOwnProperty('children')) {
+              creatList(secondCity.children, third);
+            } else {
+              third = [{text: '', value: 0}];
+              checked[2] = 0;
+            }
+          } else {
+            second = [{text: '', value: 0}];
+            third = [{text: '', value: 0}];
+            checked[1] = 0;
+            checked[2] = 0;
+          }
+          
+          picker.refillColumn(1, second);
+          picker.refillColumn(2, third);
+          picker.scrollColumn(1, 0)
+          picker.scrollColumn(2, 0)
+      }
+
+      function secondChange() {
+          third = [];
+          checked[1] = selectedIndex;
+          var first_index = checked[0];
+          if (city[first_index].children[selectedIndex].hasOwnProperty('children')) {
+            var secondCity = city[first_index].children[selectedIndex];
+            creatList(secondCity.children, third);
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          } else {
+            third = [{text: '', value: 0}];
+            checked[2] = 0;
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          }
+      }
+
+    });
+
+    picker.on('picker.valuechange', function (selectedVal, selectedIndex) {
+        console.log(selectedVal);
+        cityId = selectedVal;
+        console.log(cityId);
+        console.log(selectedIndex);
+    });
+
+    nameEl.addEventListener('click', function () {
+        picker.show();
+    });
+
+    var token = getCookie('token');
+
+    $('.j-submit').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault(); 
+
+        $.ajax({
+            type: 'POST',
+            url:  reqUrl("add_inserance"),
+            data:{
+                token: token,
+                insurer_id: GetQueryString('id'),
+                province: cityId[0],
+                city: cityId[1],
+                county: cityId[2],
+                no: $('#no').val(),
+                name: $('#name').val(),
+                phone: $('#phone').val()
+            },
+            dataType: 'JSON',
+            async: false,
+            success:  function(data) {
+                console.log(data.msg);
+                mask('提交成功');
+                location.reload(); 
+            }
+        });
+    });
+
+
+});
+</script>
+</body>
+</html>

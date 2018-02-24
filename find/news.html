@@ -1,0 +1,251 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/amazeui.swiper.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">消息中心</h1>
+    <div class="am-header-right am-header-nav">
+        <a class="icon-clear" href="#"></a>
+    </div>
+</header>
+<div class="container">    
+
+    <ul class="am-avg-sm-2 news-nav">
+        <li><a href="javascript:location.href=preUrl('find/news.html?type=0')">系统消息</a></li>
+        <li><a href="javascript:location.href=preUrl('find/news.html?type=1')">订单提醒</a></li>
+    </ul>
+    
+    <div id="news-list"></div>
+    
+    <!-- 消息操作modal -->
+    <div class="am-modal-actions cy-actions" id="m-clear">
+        <div class="am-modal-actions-group">
+            <ul class="am-list">
+                <li><a class="j-read" href="#">全部设为已读</a></li>
+                <li><a class="j-clear" href="#">清空消息列表</a></li>
+            </ul>
+        </div>
+        <div class="am-modal-actions-group">
+            <button class="am-btn am-btn-block" data-am-modal-close>取消</button>
+        </div>
+    </div> 
+
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/amazeui.swiper.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script id="news-item" type="text/html">
+    {{each listItems as value i}}
+        <div class="swiper-container " data="{{value.id}}">
+            <div class="swiper-wrapper base-wrap">
+                <div class="swiper-slide">
+                    <div class="base-item news-item">
+                        <div class="station-img" style="overflow: visible;">
+                            {{if value.type == "0"}}
+                            <img class="icon" src="../assets/i/icon-consult.png">
+                            {{else}}
+                            <img class="icon" src="../assets/i/icon-order.png">
+                            {{/if}}
+                            {{if value.is_read == "0"}}
+                                <i class="red-pot"></i>
+                            {{/if}}
+                        </div>
+                        <div class="news-cont">
+                            <h4>
+                                {{if value.type == 0}}
+                                <span>系统消息  </span>
+                                {{else}}
+                                <span>订单提醒  </span>
+                                {{/if}}
+                                <time>{{value.createtime}}</time>
+                            </h4>
+                            <p>{{value.content}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="width: 80px;">
+                    <div class="del-btn"></div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+<script>
+  $(function(){
+    var para = window.location.search;
+    var token = getCookie("token");
+    var type = GetQueryString('type');
+
+    //导航状态
+    if(type == 0){
+        $('.news-nav li').eq(0).addClass('active');
+    }else{
+        $('.news-nav li').eq(1).addClass('active');
+    }
+
+    //分页
+    var page = 0;
+    var $dropload = $('.container').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('notice_list'),
+                data:{
+                    token: token,
+                    type: type,
+                    page: page
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+                        window.location.href = preUrl('login/login.html'+ para +'&find/news_sys.html');
+                    }else if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+                        if(arrLen > 0){
+                            //预编译模板
+                            var content = template('news-item', data.infor);
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        $('#news-list').append(content);
+
+                        var mySwiper = new Swiper('.swiper-container',{
+                            slidesPerView : 'auto',       
+                        });
+                        console.log('ok');
+                        //删除按钮设置高度
+                        $('.swiper-container').each(function(){
+                            var h = $(this).find('.base-item').outerHeight();
+
+                            $(this).find('.del-btn').css('height',h+'px');
+                            // var that = $(this);
+                            // that.on('click',function(){
+                            //     var id = $(this).attr('data');
+                            //     $(this).find('.red-pot').remove();
+
+                            //     newsOper(token, type,  1, id, '已读');
+                            // });
+                        });
+
+                        $('.swiper-container').on('click',function(){
+                            var id = $(this).attr('data');
+                            $(this).find('.red-pot').remove();
+
+                            newsOper(token, type, id, 1, '已读');
+                        });
+
+                        //删除消息
+                        $('.del-btn').each(function(){
+                            var that = $(this);
+                            that.on('click',function(){
+                                var id = $(this).parents('.swiper-container').attr('data');
+                                $(this).parents('.swiper-container').remove();
+
+                                newsOper(token, type, id, 3, '删除成功');
+                            });
+                        });
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }
+        
+    }); 
+
+    
+
+      //modal
+      $('.icon-clear').on('click',function(){
+          $('#m-clear').modal();
+      });
+
+      
+
+      //全部设为已读
+      $('.j-read').on('click',function(){
+          newsOper(token, type, 0, 2, '全部设为已读');
+          $('#m-clear').modal('close');
+          return false;
+      });
+
+      //全部删除
+      $('.j-clear').on('click',function(){
+
+          newsOper(token, type, 0, 4, '全部删除');
+          $('#m-clear').modal('close');
+          return false;
+      });
+ 
+  });
+
+//消息操作ajax
+function newsOper(token, type, id, operatetype, content){
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('notice_saveoperate'),
+        data:{
+            token: token,
+            type: type,
+            id: id,
+            operatetype: operatetype
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.error_code == 200){
+                window.location.href = preUrl('login/login.html'+ para +'&find/news.html');
+            }else if(data.success){
+                mask(content);
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>

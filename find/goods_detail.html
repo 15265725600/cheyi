@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">商品详情</h1>
+</header>
+<div class="container" id="detail-wrap">
+    <div class="goods-item am-margin-0">
+        <div class="station-img n-border">
+            <img src="../assets/i/d1.jpg">
+            <p><span>已售 <b>155</b></span> <span class="c-orange am-fr">库存 <b>500</b></span></p>
+        </div>
+        <div class="am-margin-sm posr">
+            <h4 class="two-truncate">马瑞利SN级5w-40全合成汽车机油发动机润滑油4L正 品汽车机油</h4>
+            <div class="am-text-default">1000积分</div>
+            <span class="am-text-xs c-grey">4L</span>
+            <a class="red-btn" href="#">立即兑换</a>
+        </div>
+    </div>
+
+    <!-- 商品简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>商品简介：</h4>
+            <p>中国石油天然气股份有限公司是中国油气行业占主导地位的最大的油气生产和销售商，是中国销售收入最大的公司之一，也是世界最大的石油公</p>
+            <img src="../assets/i/d1.jpg">
+            <img src="../assets/i/d1.jpg">
+        </div>  
+    </div>
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="detail-cont">
+    <div class="goods-item am-margin-0">
+        <div class="station-img n-border">
+            <img style="height: 200px" src="{{img}}">
+            <p><span>已售 <b>{{sales}}</b></span> <span class="c-orange am-fr">库存 <b>{{count}}</b></span></p>
+        </div>
+        <div class="am-margin-sm posr">
+            <h4 class="two-truncate">{{goods_name}}</h4>
+            <div class="am-text-default">{{price}}积分</div>
+            <span class="am-text-xs c-grey">{{property}}</span>
+            <a class="red-btn" href="javascript:location.href=preUrl('find/exchange.html')+'?id='+{{id}}+'&price='+{{price}}+'&type=2'">立即兑换</a>
+        </div>
+    </div>
+
+    <!-- 商品简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>商品简介：</h4>
+            <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=1&id={{id}}"></iframe>
+        </div>  
+    </div>
+</script>
+
+<script type="text/javascript">
+$(function(){
+
+    //商品详情
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('exchange_goods_detail'),
+        data:{
+            id: GetQueryString('id')
+        },
+        dataType: 'json',
+        success: function(data){
+            if(data.success){
+                var html = template('detail-cont', data.infor[0]);
+                $('#detail-wrap').html(html);
+
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

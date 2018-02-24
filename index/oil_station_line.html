@@ -1,0 +1,186 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">加油站</h1>
+    <div class="am-header-right am-header-nav">
+        <a class="icon-list" href="javascript:location.href=preUrl('index/oil_station.html')"></a>
+    </div>
+</header>
+<div class="container">
+    <div class="" id="map"></div>
+    <!-- <div class="car-marker active"> <span>4.30 </span></div> -->
+
+
+</div>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25"></script> 
+
+<script src="../assets/js/hm_cy.js"></script>
+<script>
+$(function(){
+    //首页背景高度
+    var oHeight = $(window).height();
+    $('.index-bg').height( oHeight );
+
+    //地图高度
+    var oHeight = $(window).height() - 49;
+    $('#map').height( oHeight );
+
+
+    //初始化地图
+    var map = new AMap.Map('map', {
+        resizeEnable: true,    
+        zoom: 13
+    });    
+    //定位
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RT'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+    //定位成功完成时
+    var lng, lat;
+    function onComplete(data) {
+        var iconContent = []; //图标数组
+        var markers = [];//点标记数组
+        lng = data.position.getLng();
+        lat = data.position.getLat();
+
+        //存储经纬度
+        var position = {
+            lng: lng,
+            lat: lat
+        };
+
+        setInfo('position', JSON.stringify(position));
+
+       
+        $.ajax({
+            type: 'post',
+            url: reqUrl('station_list'),
+            dataType : "json",  
+            data: {
+                type: 1,
+                lng: lng,
+                lat: lat
+            },
+            async : false ,
+            success: function(data){
+                if(data.success){
+                    data = data.infor.listItems;
+                    for(var i = 0; i<data.length; i++){
+                      if(i == 0){
+                          var content = '<div class="car-marker active"> <span> '+ data[i].distance +' </span></div';
+                      }else{
+                          var content = '<div class="car-marker"> <span> '+ data[i].distance +' </span></div';
+                      }
+
+                      iconContent.push(content);
+
+                      var item = {
+                            content: iconContent[i],
+                            position: [data[i].lng, data[i].lat],
+                            extData: [data[i].id, data[i].distance, data[i].name, data[i].address , data[i].lng, data[i].lat],
+                            map: map
+                      }
+                      markers.push(item);
+                    }
+
+                    var infoWindowContent = '<div class="oil-info-wrap" >'+
+                                '<div class="oil-info">'+
+                                '<div class="am-padding">'+
+                                '<i class="icon-favor"></i>'+
+                                '<h4 class="am-text-truncate">'+ data[0].name +'</h4>'+
+                                '<p><span>'+ data[0].distance +'km</span> &nbsp;&nbsp;<span>'+ data[0].address +'</span></p>'+
+                                '<a class="c-blue" href="javascript:location.href=preUrl(\'index/oil_station_detail.html?id='+ data[0].id +'&lng='+ lng +'&lat='+ lat +'\')">详情 ></a>'+
+                                '</div>'+
+                                '<a class="go-link" href="javascript:location.href=preUrl(\'index/line.html?address='+ escape(data[0].address) +'&lng='+ data[0].lng +'&lat='+ data[0].lat +'\')">到这去</a>'+
+                                '</div>'+
+                                '</div>';
+
+                    var infoWindow = new AMap.InfoWindow({
+                        isCustom: true,  //使用自定义窗体
+                        content: infoWindowContent
+                    });
+                    infoWindow.open(map, [lng, lat]);
+
+                    // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
+                    markers.forEach(function(marker) {
+                        var marker = new AMap.Marker({
+                            map: map,
+                            topWhenClick: true,
+                            content: marker.content,
+                            position: [marker.position[0], marker.position[1]],
+                            extData: marker.extData
+                        }).on('click',function(e){
+                            var extData = e.target.G.extData;
+                            var content = '<div class="oil-info-wrap" >'+
+                                            '<div class="oil-info">'+
+                                            '<div class="am-padding">'+
+                                            '<i class="icon-favor"></i>'+
+                                            '<h4 class="am-text-truncate">'+ extData[2] +'</h4>'+
+                                            '<p><span>'+ extData[1] +'km</span> &nbsp;&nbsp;<span>'+ extData[3] +'</span></p>'+
+                                            '<a class="c-blue" href="javascript:location.href=preUrl(\'index/oil_station_detail.html?id='+ extData[0] +'&lng='+ lng +'&lat='+ lat +'\')">详情 ></a>'+
+                                            '</div>'+
+                                            '<a class="go-link" href="javascript:location.href=preUrl(\'index/line.html?address='+ escape(extData[3]) +'&lng='+ extData[4] +'&lat='+ extData[5] +'\')">到这去</a>'+
+                                            '</div>'+
+                                            '</div>';
+                         
+                            this.setContent('<div class="car-marker active"> <span> '+ extData[1] +' </span></div ');
+
+                            infoWindow.setContent(content);
+                            infoWindow.open(map, e.target.getPosition());
+                        });
+
+                    });
+
+                    var newCenter = map.setFitView();
+                    newCenter.getCenter();
+
+                }else{
+                    mask(data.msg);
+                }    
+            },
+        });
+ 
+        
+    }
+    //解析定位错误信息
+    function onError(data) {
+        document.getElementById('station-wrap').innerHTML = '定位失败';
+    }
+
+});
+</script>
+</body>
+</html>

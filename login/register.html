@@ -1,0 +1,194 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<div class="container">
+    
+    <div class="logo-wrap">
+        <ul class="am-avg-sm-2 cy-nav">
+            <li><a class="active" href="javascript:location.href=preUrl('login/register.html')">注册</a></li>
+            <li><a href="javascript:location.href=preUrl('login/login.html')">登录</a></li>
+        </ul>
+    </div>
+    <form action="" method="post" class="am-form login-form">  
+        <div class="am-form-group">
+            <label for="phone" class="icon-tel"></label>
+            <input id="phone" type="text" placeholder="输入手机号码">
+        </div>
+        <div class="am-form-group">
+            <label for="code" class="icon-code"></label>
+            <input id="code" type="text" placeholder="填写验证码">
+            <a class="j-code" data="0" href="#">获取验证码</a>
+        </div>
+
+        <div class="am-form-group">
+            <label for="psw" class="icon-psw"></label>
+            <input id="psw" type="password" placeholder="输入6-12位密码">
+        </div>
+        <div class="posr">
+            <p class="j-info"></p>
+            <button class="am-btn am-margin-bottom-0 j-register">注册</button>
+            <p class="am-text-center am-text-xs am-margin-top-sm c-grey">点击注册，即表示你同意<a class="c-red" href="http://124.128.23.74:8010/hmapi_cheyi/registration_agreement.jsp">《注册协议》</a></p>
+        </div>
+        
+    </form>
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/javascript">
+$(function(){
+    //发送验证码
+$('.j-code').on('click',function(){
+   var data = parseInt($(this).attr('data')); 
+   var numbers = /^1\d{10}$/;
+   var val = $('#phone').val().replace(/\s+/g,"");
+   if(!numbers.test(val) || val.length ==0){
+        $('.j-info').show().html('请输入正确的手机号');
+        return false;
+   }
+
+   if(numbers.test(val) && data == 0){
+        //验证用户是否存在
+        $.ajax({
+            type: 'POST',
+            url:  reqUrl("client_verify"),
+            data: { 
+                "username": $("#phone").val(),
+            },
+            dataType: 'JSON',
+            async: false,
+            success:  function(data) {  
+                if(data.error_code=="106"){
+                    //获取验证码
+                    $.ajax({
+                        type: 'POST',
+                        url:  reqUrl("code_get"),
+                        data: { 
+                            "username": $("#phone").val(),
+                        },
+                        async: false,
+                        dataType: 'JSON',
+                        success:  function(data) {  
+                            //console.log(data.msg); 
+                                 
+                        }
+                    });
+
+                    var time = 60;
+                    function timeCountDown(){
+                        if(time==0){
+                          clearInterval(timer);
+                          $('.j-code').html("发送");
+                          $('.j-code').attr('data','0');
+                          return true;
+                        }
+                        $('.j-code').html("重发<b class='c-red'>"+time+"</b>s");
+                        $('.j-info').show().html('验证码已发送到您的手机，请注意查收！');
+                        time--;
+                        $('.j-code').attr('data','1');
+                        return false;
+                    }
+
+                    timeCountDown();
+                    var timer = setInterval(timeCountDown,1000);
+                }else{
+                    mask(data.msg);
+
+                    return;
+                }
+            }
+        });
+
+        
+        
+    }   
+});
+
+//点击注册
+$('.j-register').on('click',function(e){
+    e.stopPropagation();
+    e.preventDefault();
+
+    var phone = $('#phone').val();
+    var code = $('#code').val();
+    var psw = $('#psw').val();
+
+    if($('#phone').val()==""){
+        $('#phone').focus();
+        mask('手机号不能为空');
+        return false;
+    }
+
+    var sMobile = /^[1][358][0-9]{9}$/;
+    if(!sMobile.exec($("#phone").val()))
+    { 
+        mask('手机号格式不正确');
+        $('.jr-mobile').focus();
+        return false;
+    }
+    if( code == '' ){
+        mask('请输入验证码');
+        return false;
+    }
+    if( psw == '' ){
+        mask('请输入密码');
+        return false;
+    }
+
+    //验证码验证
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("code_verify"),
+        data: { 
+            username: phone,
+            code: code
+        },
+        async: false,
+        dataType: 'JSON',
+        success:  function(data) {  
+            if(data.success){
+                console.log(data.infor[0].temp_token);  
+                var token = data.infor[0].temp_token;
+
+                window.location.href = preUrl('login/perfect.html?username='+ phone +'&psw='+ psw +'&token='+ token +'');
+            }else{
+                mask(data.msg);
+            }
+
+        }
+    });  
+
+});
+
+});
+</script>
+</body>
+</html>

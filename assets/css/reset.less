@@ -1,0 +1,225 @@
+@import url("mixins.less");
+
+// 变量定义
+
+@grey_dark: #000;
+@grey: #262536;
+@grey_light: #656565;
+@grey_lighter: #808080;
+@grey_dark: #444;
+@red: #f13d3e;
+@orange: #fa952f;
+@blue: #3e8cdc;
+@bac_grey: #f9f9f9;
+@border_grey: #d9d9d9;
+
+
+.c-grey{color: @grey_light}
+.c-grey-light{color: @grey_lighter}
+.c-grey-dark{color: @grey_dark}
+.c-red{color: @red}
+.c-orange{color: @orange;}
+.c-blue{color: @blue;}
+.c-black{color: #000;}
+.posr{position: relative;}
+.n-border{border: none !important;}
+.line{text-decoration: underline;}
+.two-truncate{
+    .line-clamp(2, 24px);
+    max-height: 48px;
+}
+.border-b{
+	.border-b();
+}
+
+body{
+	max-width: 640px;
+    min-width: 320px;
+	margin: 0 auto;
+	background-color: #f0f0f0;
+	font-size: 14px;
+	font-family: "Microsoft YaHei";
+	color: @grey;
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+ul{margin: 0; padding: 0}
+li{ list-style: none;}
+i{ font-style: normal;}
+b,label{ font-weight: normal;}
+a{color: @grey; }
+a:focus, button:focus{ outline: none;}
+a:hover{ color: @red; }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button{
+    display: none;
+}
+
+button.am-btn{border: none;}
+button:focus,textarea:focus,
+button.am-btn:focus{ 
+    box-shadow: none; 
+    outline: none; 
+    border: none;
+}
+
+.am-form input[type=text],
+.am-form input[type=password], 
+.am-form input[type=search],
+.am-form input[type=tel],
+.am-form input[type=number],
+.am-form input[type=email],
+.am-form select, .am-form textarea{
+	border: none;
+	font-size: 14px;
+	padding: 10px 14px;
+}
+
+
+.am-form input[type=text]:focus,
+.am-form input[type=password]:focus,
+.am-form input[type=search]:focus,
+.am-form input[type=tel]:focus,
+.am-form input[type=number]:focus,
+.am-form input[type=email]:focus,
+.am-form select:focus, .am-form textarea:focus{
+	border: none;
+	outline: none;
+	font-size: 14px;
+	padding: 10px 14px;
+	box-shadow: none;
+}
+
+.am-pureview-direction a:before{
+  	font: normal normal normal 3.6rem/1 FontAwesome,sans-serif;
+}
+
+
+/*表单美化*/
+@box_width: 20px;
+
+input.mt[type=radio],input.mt[type=checkbox] {
+    -webkit-appearance: none;
+    width: @box_width;
+    height: @box_width;
+    margin: 3px 0;
+    .borderRadius(3px);
+    text-align: center;
+    vertical-align: middle;
+    line-height: @box_width + 2px;
+    outline: 0;
+    .border(1px,#afafaf);
+}
+input.mt[type=radio]:checked,input.mt[type=checkbox]:checked {
+    background-color: @red;
+    border-color: @red;
+    color: #fff;
+}
+input.mt[type=radio]:checked:after,input.mt[type=checkbox]:checked:after {
+    content: "✓";
+    font-size: 14px;
+    font-weight: bold;
+    font-family: base_icon;
+    position: relative;
+    top: -2px;
+}
+input.mt[type=checkbox], input.mt[type=radio] {
+    .borderRadius();
+    background: #fff;
+}
+
+
+//遮罩
+.layer{
+  box-sizing: border-box;
+  min-width: 100px;
+  max-width: 300px;
+  padding: 12px 20px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0,0,0,.6);
+  position: fixed;
+  top: 40%;
+  left: 0;
+  z-index: 99999;
+  border-radius: 6px;
+  display: none;
+}
+
+
+/*上传图片*/
+.upload-img{
+	li{
+		float: left;
+		margin-right: 10px;
+		position: relative;
+		img{
+			width: 60px;
+			height: 60px;
+		}
+	}
+	input{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0px;
+		bottom:0px;
+		z-index: 1;
+		opacity: 0;
+		cursor: pointer;
+	}
+	.am-close {
+    	width: 20px;
+		height: 20px;
+	   line-height: 16px;
+		border-radius: 50%;
+		position: absolute;
+		top: 6px;
+		right: 4px;
+		cursor: pointer;
+		z-index: 99;
+		background-color: #ff2222;
+		color: #fff;
+		opacity: 1;
+	}
+}
+
+
+// 返回顶部
+.top{
+	display: block;
+	width: 50px;
+	height: 50px;
+	background: #d0d0d0  url(../i/up.png) no-repeat center;
+	background-size: 50px;
+	position: fixed;
+	bottom: 60px;
+	right: 30px;
+	display: none;
+}
+
+
+//数量加减操作
+.count {
+    width: 140px;
+    .add, .reduce{
+    	.block(30px,24px,center,#fff);
+    	.border(1px,@red);
+    	line-height: 18px;
+    	background-color: @red;
+    	font-size: 26px;
+   		cursor:pointer;
+   		float: left;
+	    position: relative;
+	    z-index: 0;
+    }
+    input[type=text] {
+    	.block(48px,24px,center,@grey);
+	    .border(1px,@red);
+	    line-height: 24px;
+	    float: left;
+	}
+}
+
+

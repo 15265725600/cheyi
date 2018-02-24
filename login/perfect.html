@@ -1,0 +1,604 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header "> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">个人资料</h1>
+</header>
+
+<div class="container">
+    <form action="" method="post" class="am-form cy-form">
+        <div class="file-wrap">
+            <img src="../assets/i/file-bg.jpg">
+            <div class="station-img">
+                <img class="avatar" src="../assets/i/avatar.jpg">
+                <input class="j-file"  name="temp_file" type="file" />
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label for="nickname">昵称</label>
+            <input class="am-padding-right-0" type="text" id="nickname" placeholder="请填写" />
+        </div>
+
+        <div class="am-form-group am-cf j-type">
+            <label>用户类型</label>
+            <span class="am-fr c-grey-light"> <b> <a class="c-blue" href="javascript:;">去选择</a></b> &gt; </span>         
+        </div>
+        <div class="upload-wrap" style="display: block;">
+            <div class="c-grey-light">上传相关证件图片(限3张)</div>
+            <ul class="upload am-cf">
+                <!-- <li><img src="../assets/i/upload.jpg"></li>
+                <li>
+                    <img src="../assets/i/upload.jpg">
+                    <i class="icon-close"></i>
+                </li> -->
+                <li class="upload-btn">
+                    <img src="../assets/i/upload.jpg">
+                    <input type="file" class="j-file-cert" name="temp_file" />
+                </li>
+            </ul>
+        </div> 
+        <div class="am-form-group am-cf" id="chose">
+            <label>用户地址</label>
+            <span class="am-fr c-grey-light"> <b id="j-city"> <a class="c-blue" href="#">去选择</a></b> &gt; </span> 
+        </div>
+
+
+        <div class="base-wrap am-margin-top-sm j-car">
+            <div class="base-item c-grey-light">车辆绑定<b class="am-text-xs">（选填）</b> <span class="am-fr"><a class="c-blue" href="#">去绑定</a> ></span></div>
+        </div>
+
+
+         <button class="am-btn j-save">提交</button>
+
+    </form>
+  
+    <!-- 用户类型modal -->
+    <div class="am-modal-actions cy-actions" id="m-type">
+        <div class="am-modal-actions-group">
+            <ul class="am-list">
+                <li><a href="#2">个人用户</a></li>
+                <li><a href="#1">企业用户</a></li>
+            </ul>
+        </div>
+        <div class="am-modal-actions-group">
+            <button class="am-btn am-btn-block" data-am-modal-close>取消</button>
+        </div>
+    </div>
+
+    <!-- 绑定车辆信息modal -->
+    <div class="am-popup ly-popup" id="m-car">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd n-border"  style="z-index: 999; position: fixed;">
+                <div class="am-popup-hd n-border">
+                    <span data-am-modal-close class="am-close">&times;</span>
+                    <h1 class="popup-title">添加车辆</h1>
+                </div>
+            </div>
+            <div class="am-popup-bd am-padding-0">
+                <form action="" method="post" class="am-form cy-form">               
+                    <div class="am-form-group">
+                        <label for="car-number">车牌号</label>
+                        <input type="text" id="car-number" placeholder="请填写车牌号" />
+                    </div>
+                    <div class="am-form-group am-cf " id="j-cartype">
+                        <label>车型</label>
+                        <span class="am-fr c-grey-light"><b id="j-cartype-text">请选择车型</b> > </span>
+                    </div>
+                    <div class="am-form-group am-cf " id="j-color"> 
+                        <label>颜色</label>
+                        <span class="am-fr c-grey-light"><b id="j-color-text">请选择颜色</b> > </span>
+                    </div>
+                    <button class="am-btn j-car-save">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="am-popup ly-popup" id="m-car">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd n-border"  style="z-index: 999; position: fixed;">
+                <div class="am-popup-hd n-border">
+                    <span data-am-modal-close class="am-close">&times;</span>
+                    <h1 class="popup-title">车辆绑定</h1>
+                    <a class="j-add" href="javascript:location.href=preUrl('login/car_add.html') + window.location.search">添加</a>
+                </div>
+            </div>
+            <div class="am-popup-bd am-padding-0">
+                <div class="base-wrap car-info"></div>
+            </div>
+        </div>
+    </div> -->
+
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/exif.min.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+    //上传头像
+    $('.j-file').on('change',function(e){
+        if (!window.FileReader) return; 
+
+        e.stopPropagation();
+        e.preventDefault(); 
+      
+        var file = e.target.files[0];  
+        var content = '';
+
+     
+        
+        if (!file.type.match('image.*')) {  
+            alert('文件'+ f.name + '不是图片') 
+            return;   
+        }   
+
+        var orientation;
+        //EXIF js 可以读取图片的元信息 https://github.com/exif-js/exif-js
+        EXIF.getData(file,function(){
+            orientation=EXIF.getTag(this,'Orientation');
+        });
+
+        var reader = new FileReader();  
+        
+        reader.onload = function(e){             
+                getImgData(this.result,orientation,function(data){
+                    $.ajax({
+                        type: 'POST',
+                        url:  reqUrl("webfile_upload"),
+                        data:{
+                            keytype: 1,
+                            temp_file: data
+                        },
+                        dataType: 'JSON',
+                        //async: false,
+                        success:  function(data) {
+                            console.log(data.msg);
+                            content = ' <img class="avatar" src="'+ data.infor[0].item1 +'">';
+                            $('.j-file').parent().find('img').replaceWith(content);     
+                        }
+                    });  
+                });
+               
+        } 
+        reader.readAsDataURL(file); 
+        
+    });
+
+    //企业用户上传证件
+    var count = 0;
+    $('.j-file-cert').on('change',function(e){
+        count++;
+        console.log(count);
+        if(count < 4){
+            var that = $(this);
+            if (!window.FileReader) return; 
+
+            e.stopPropagation();e.preventDefault(); 
+          
+            var file = e.target.files[0];  
+            var content = '';
+
+            if (!file.type.match('image.*')) {  
+                alert('文件'+ f.name + '不是图片') 
+                return;   
+            }   
+
+            var orientation;
+            //EXIF js 可以读取图片的元信息 https://github.com/exif-js/exif-js
+            EXIF.getData(file,function(){
+                orientation=EXIF.getTag(this,'Orientation');
+            });
+
+            var reader = new FileReader();  
+            
+            reader.onload = function(e){             
+                    getImgData(this.result,orientation,function(data){
+                        $.ajax({
+                            type: 'POST',
+                            url:  reqUrl("webfile_upload"),
+                            data:{
+                                keytype: 2,
+                                temp_file: data
+                            },
+                            dataType: 'JSON',
+                            //async: false,
+                            success:  function(data) {
+                                console.log(data.msg);
+                                content = '<li>'+
+                                          '<img class="j-image" src="'+ data.infor[0].item1 +'">'+
+                                          '<i class="icon-close"></i>'+
+                                          '</li>'
+
+                                that.parent().before(content);    
+                            }
+                        });  
+                    });
+                   
+            } 
+            reader.readAsDataURL(file); 
+        }else{
+            mask('最多传3张证件图片');
+            count = 3;
+            return false;
+        }
+        
+        
+    });
+
+    //删除上传图片
+    $('.upload').on('click','.icon-close',function(){
+        $(this).parent().remove();
+        if(count > 0){
+            count--;
+        }
+        console.log(count);
+    });
+
+    //用户类型modal
+    $('.j-type').on('click',function(){
+        $('#m-type').modal();
+    });
+    //用户类型选择
+    var type; //用户类型
+    $('.am-list a').on('click',function(){
+        console.log($(this).html());
+
+        type = $(this).attr('href').substring(1);
+        if(type == '1'){
+            $('.upload-wrap').show();
+            $('.j-type').find('b').html('企业用户');
+        }else{
+            $('.upload-wrap').hide();
+            $('.j-type').find('b').html('个人用户');
+        }
+
+        $('#m-type').modal('close');
+
+    });
+
+
+    //获取城市列表
+    var city = [];
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("district_all_get"),
+        dataType: 'JSON',
+        async: false,
+        success:  function(data) {
+            console.log(data.msg);
+            city = data.infor.listItems;
+        }
+    });
+
+
+    //城市选择
+    var cityId = [];
+    var nameEl = document.getElementById('chose');
+    var jcity = document.getElementById('j-city');
+
+    var first = []; /* 省，直辖市 */
+    var second = []; /* 市 */
+    var third = []; /* 镇 */
+
+    var checked = [0, 0, 0]; /* 已选选项 */
+
+    function creatList(obj, list){
+        obj.forEach(function(item, index, arr){
+            var temp = new Object();
+            temp.text = item.name;
+            temp.value = item.id;
+            list.push(temp);
+        })
+    }
+
+    creatList(city, first); // 省
+
+    if (city[0].hasOwnProperty('children')) {
+        creatList(city[0].children, second);//市
+    } else {
+      second = [{text: '', value: 0}];
+    }
+
+
+    if (city[0].children[0].hasOwnProperty('children')) {
+      creatList(city[0].children[0].children, third);//区
+    } else {
+      third = [{text: '', value: 0}];
+    }
+
+
+    var picker = new Picker({
+        data: [first, second, third],
+        selectedIndex: [0, 0, 0],
+        title: ''
+    });
+
+    picker.on('picker.select', function (selectedVal, selectedIndex) {
+      var text1 = first[selectedIndex[0]].text;
+      var text2 = second[selectedIndex[1]].text;
+      var text3 = third[selectedIndex[2]] ? third[selectedIndex[2]].text : '';
+
+      jcity.innerHTML = text1 + ' ' + text2 + ' ' + text3;
+    });
+
+    picker.on('picker.change', function (index, selectedIndex) {
+      if (index === 0){
+          firstChange();
+      } else if (index === 1) {
+          secondChange();
+      }
+
+      function firstChange() {
+          second = [];
+          third = [];
+          checked[0] = selectedIndex;
+          var firstCity = city[selectedIndex];
+          if (firstCity.hasOwnProperty('children')) {
+            creatList(firstCity.children, second);
+            
+            var secondCity = city[selectedIndex].children[0]
+            if (secondCity.hasOwnProperty('children')) {
+              creatList(secondCity.children, third);
+            } else {
+              third = [{text: '', value: 0}];
+              checked[2] = 0;
+            }
+          } else {
+            second = [{text: '', value: 0}];
+            third = [{text: '', value: 0}];
+            checked[1] = 0;
+            checked[2] = 0;
+          }
+          
+          picker.refillColumn(1, second);
+          picker.refillColumn(2, third);
+          picker.scrollColumn(1, 0)
+          picker.scrollColumn(2, 0)
+      }
+
+      function secondChange() {
+          third = [];
+          checked[1] = selectedIndex;
+          var first_index = checked[0];
+          if (city[first_index].children[selectedIndex].hasOwnProperty('children')) {
+            var secondCity = city[first_index].children[selectedIndex];
+            creatList(secondCity.children, third);
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          } else {
+            third = [{text: '', value: 0}];
+            checked[2] = 0;
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          }
+      }
+
+    });
+
+    picker.on('picker.valuechange', function (selectedVal, selectedIndex) {
+        console.log(selectedVal);
+        cityId = selectedVal;
+        console.log(cityId);
+        console.log(selectedIndex);
+    });
+
+    nameEl.addEventListener('click', function () {
+        picker.show();
+    });
+
+
+    //车辆绑定
+    $('.j-car').on('click',function(){
+        $('#m-car').modal();
+        $('#car-number').val('');
+        $('#j-cartype-text').html('请选择车型');
+        $('#j-color-text').html('请选择颜色');
+        
+    });
+
+    //添加  选择车型
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_type'),
+        dataType : "json",  
+        success: function(data){
+            if(data.success){
+                var nameEl1 = document.getElementById('j-cartype');
+                var valEl1 = document.getElementById('j-cartype-text');
+                var arrLen = data.infor.listItems.length;
+                var cartype = []; //车型的json数组
+                for(var i=1; i<=arrLen; i++){
+                    var item = {
+                        text: data.infor.listItems[i-1].name,
+                        value: i
+                    }
+                    cartype.push(item);
+                }
+                console.log(cartype);
+                pickerShow([cartype], nameEl1, valEl1, 1 , '');
+            }else{
+                mask(data.msg);
+            }
+        }
+    })
+
+    // 添加  选择车的颜色
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_color'),
+        dataType : "json",  
+        success: function(data){
+            if(data.success){
+                var nameEl2 = document.getElementById('j-color');//click对象
+                var valEl2 = document.getElementById('j-color-text');// 保存值
+                var arrLen = data.infor.listItems.length;
+                var carColor = [];//车型的json数组
+                for(var i=1; i<=arrLen; i++){
+                    var item = {
+                        text: data.infor.listItems[i-1].name,
+                        value: i
+                    }
+                    carColor.push(item);
+                }
+                console.log(carColor);
+                pickerShow([carColor], nameEl2, valEl2, 1 , '');
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    $('.j-car-save').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var no = $('#car-number').val() ;
+        var type = $('#j-cartype-text').html() ;
+        var color = $('#j-color-text').html() ;
+
+        if(no == ''){
+            mask('请填写车牌号');
+            return;
+        }
+        if(type == ''){
+            mask('请填写车牌号');
+            return;
+        }
+        if(color == ''){
+            mask('请填写车牌号');
+            return;
+        }
+
+        //保存所填车辆信息，登录后首页调取接口保存
+        if(getInfo('carArr') == null){
+            var carArr = [];
+        }else{
+            var carArr = JSON.parse(getInfo('carArr'));
+        }
+        
+        var carItem = {
+            no: no,
+            type: type,
+            color: color
+        }
+        carArr.push(carItem);
+
+        setInfo('carArr', JSON.stringify(carArr));
+
+
+        var content = '<div class="base-item"> '+ no +' '+ type +' '+ color +' </div>';
+        $('.j-car').append(content);
+        $('#m-car').modal('close');
+    });
+
+    //页面刷新时将保存的car信息清除
+    if (!window.name) {
+        window.name="perfect" //第一次打开时设置name
+    }else{
+        removeInfo('carArr'); //刷新时能重新读到name
+    }
+
+    //保存个人资料进行注册
+    $('.j-save').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault(); 
+
+        //var psw = hex_md5(hex_md5(GetQueryString('psw')) + 'cb08bd3a57be55c375040ec59f343e8e');
+        var psw = hex_md5('cb08bd3a57be55c375040ec59f343e8e' + hex_md5(GetQueryString('psw')));
+        //完善信息提交，调用注册接口
+        var avatar = $('.avatar').attr('src'); //头像
+
+        // 企业用户证件照
+        var imgArr = [];
+        $('.j-image').each(function () {
+            var that = $(this);
+            imgArr.push(that.attr('src'));
+        });
+        var imgSrc =  imgArr.join(',');
+
+
+        $.ajax({
+            type: 'POST',
+            url:  reqUrl("client_add"),
+            data: {
+                temp_token: GetQueryString('token'),
+                username: GetQueryString('username'),
+                password: psw,
+                type: type,
+                nickname: $('#nickname').val(),
+                img: avatar,
+                imgs: imgSrc,
+                province: cityId[0],
+                city: cityId[1],
+                county: cityId[2]
+            },
+            dataType: 'JSON',
+            async: false,
+            success:  function(data) {
+                console.log(data.msg);
+                if(data.success){
+                    $.ajax({
+                        type: 'POST',
+                        url:  reqUrl("client_login"),
+                        data: {
+                            username: GetQueryString('username'),
+                            password: psw,
+                        },
+                        dataType: 'JSON',
+                        async: false,
+                        success:  function(data) {
+                            console.log(data.msg);
+                            setCookie("token", data.infor[0].token, 365);
+                            window.location.href = preUrl('index/index.html?type=0');
+                        }
+                    });
+                }else{
+                    mask(data.msg);
+                }
+                
+
+
+            }
+        });
+    })
+
+
+});
+</script>
+</body>
+</html>

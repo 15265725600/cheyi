@@ -1,0 +1,118 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">评价</h1>
+</header>
+<div class="container">
+    <div class="base-wrap n-border">
+        <div class="info-hd">评价(<b></b>)</div>
+    </div>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="comment-item">
+    {{each listItems as value i}}
+        <div class="info-wrap">
+            <img src="{{value.client_img?value.client_img:"../assets/i/avatar.jpg"}}">
+            <div class="info-cont">
+                <h2>{{value.client_name}} <time class="c-grey-light am-text-xs am-fr">{{value.createtime}}</time></h2>
+                <div class="star-wrap">
+                    <p class="am-cf am-margin-0">
+                        <i class="icon-star {{1<=value.star?'active':''}}"></i>
+                        <i class="icon-star {{2<=value.star?'active':''}}"></i> 
+                        <i class="icon-star {{3<=value.star?'active':''}}"></i>
+                        <i class="icon-star {{4<=value.star?'active':''}}"></i>
+                        <i class="icon-star {{5<=value.star?'active':''}}"></i>
+                    </p> 
+                </div>
+                <p>{{value.content}}</p>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+$(function(){
+    var page = 0;
+    var $dropload = $('.container').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('goods_reviews'),
+                dataType: 'json',
+                data:{
+                    goods_id: GetQueryString('id'),
+                    page: page
+                },
+                success: function(data){
+                    page ++;
+                    $('.base-wrap .info-hd').find('b').html(data.infor.totalCount);
+
+                    var arrLen = data.infor.listItems.length;
+                    var content = ''
+                    if(arrLen > 0){
+                        var html = template('comment-item', data.infor);
+                    }else{
+                        // 锁定
+                        me.lock();
+                        // 无数据
+                        me.noData();
+                    }
+                    var top = ''
+                    $('.base-wrap').append(html);
+
+                    me.resetload();           
+                },
+                error: function(xhr, type){
+                    alert('Ajax error!');
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+            });
+        }
+        
+    });
+});
+</script>
+
+</body>
+</html>

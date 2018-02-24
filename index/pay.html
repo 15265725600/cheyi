@@ -1,0 +1,438 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/amazeui.swiper.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">支付</h1>
+</header>
+<div class="container">
+    <form action="" class="am-form cy-form" method="post">
+        <!-- 加气站 -->
+        <div class="station-wrap">
+            <div class="station-item" id="station">
+                
+            </div>
+        </div>
+
+        <!-- gas类型选择 -->
+        <div class="base-wrap">
+            <ul class="am-avg-sm-2 am-padding-vertical am-text-center">
+                <li style="border-right: 1px solid #a0a0a0;">
+                    <input type="radio" name="type" value="1" class="mtt" /> <span class="gas-type">CNG</span>
+                </li>
+                <li>
+                    <input type="radio" name="type" value="2" class="mtt" /> <span class="gas-type">LNG</span>
+                </li>
+            </ul>
+        </div>
+        <!-- 车辆信息 -->
+        <div class="base-wrap">
+            <div class="info-hd j-car">
+                <i class="icon-car"></i>车辆信息 
+                <span class="am-fr">></span>
+            </div>
+            <div class="car-wrap">
+                
+            </div>
+        </div>
+
+        <div class="pay-fee">
+            <label for="pay-fee">￥</label>
+            <input type="text" id="pay-fee" placeholder="请输入付款金额" />
+        </div>
+
+        <!-- 选择支付方式 -->
+        <div class="pay-wrap">
+            <div class="pay-hd">请选择支付方式：</div>
+            <div class="base-wrap ">
+                <div class="base-item am-cf">
+                    <img src="../assets/i/pay-ye.jpg" alt="余额支付">
+                    <div class="pay-way">
+                        <h4>余额支付</h4>
+                        <p class="am-margin-0" id="balance"></p>
+                    </div>
+                    <input type="radio" name="pay-way" value="1" class="mt">
+                </div>
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-yl.jpg" alt="银联支付">
+                    <div class="pay-way">
+                        <h4>银联支付</h4>
+                        <p class="am-margin-0">推荐银联储蓄用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+                <div class="base-item am-cf">
+                    <img src="../assets/i/pay-wx.jpg" alt="微信支付">
+                    <div class="pay-way">
+                        <h4>微信支付</h4>
+                        <p class="am-margin-0">推荐安装微信客户端用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" value="2" class="mt">
+                </div>
+                <!-- <div class="base-item am-cf">
+                    <img src="../assets/i/pay-zfb.jpg" alt="支付宝支付">
+                    <div class="pay-way">
+                        <h4>支付宝支付</h4>
+                        <p class="am-margin-0">推荐安装支付宝客户端的用户使用</p>
+                    </div>
+                    <input type="radio" name="pay-way" class="mt">
+                </div> -->
+            </div>
+        </div>
+
+        <button class="am-btn" id="j-pay">确定支付</button>
+    </form>
+    
+    <!-- 绑定车辆信息modal -->
+    <div class="am-popup ly-popup" id="m-car">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd n-border"  style="z-index: 999; position: fixed;">
+                <div class="am-popup-hd n-border">
+                    <span data-am-modal-close class="am-close">&times;</span>
+                    <h1 class="popup-title">车辆绑定</h1>
+                    <a class="j-add" href="javascript:location.href=preUrl('index/car_add.html')+window.location.search">添加</a>
+                </div>
+            </div>
+            <div class="am-popup-bd am-padding-0">
+                <form action="" method="post" class="am-form cy-form">  
+                    <div id="car-list"></div>
+                    <button class="am-btn j-save">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 支付密码modal -->
+    <div class="am-modal am-modal-alert xp-modal" tabindex="-1" id="m-pay">
+        <div class="am-modal-dialog">
+            <form class="am-form" method="post" action="">
+                <div class="am-modal-hd posr" id="modal-pay">
+                    
+                </div>
+                <div class="am-modal-bd">
+                    <div class="am-form-group">
+                        <input type="password" id="psw" placeholder="请输入支付密码" />
+                    </div>
+                </div>
+                <div class="am-modal-footer">
+                  <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+ 
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<!-- <script src="../assets/js/amazeui.swiper.min.js"></script> -->
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="car-item">
+    {{each listItems as value i}}
+        <div class="swiper-container " data="{{value.id}}">
+            <div class="swiper-wrapper base-wrap">
+                <div class="swiper-slide">
+                    <div class="base-item car-info">
+                        <div>车辆{{i+1}}：<span class="j-no">{{value.no}} </span></div>
+                        <div class="car-info-type"><span class="am-padding-right-sm j-color">{{value.color}}</span><span class="j-type">{{value.type}}</span></div>
+                        <i class="icon-right"></i>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="width: 80px;">
+                    <div class="del-btn"></div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+$(function(){
+    var para = window.location.search; //url参数
+
+    //加气站信息
+    var topContent = '<div class="station-img">'+
+                            '<img src="'+ GetQueryString('img') +'">'+
+                        '</div>'+
+                        '<div class="station-cont am-padding-top">'+
+                            '<h4 class="am-text-truncate">'+ GetQueryString('name') +'</h4>'+
+                            '<div class="star-wrap" style="margin-top: 8px;">'+
+                                '<p class="am-cf am-margin-0">'+ starLevel() +'</p> '+
+                            '</div>'+
+                        '</div>';
+
+    
+    $('#station').html( topContent );
+
+    var carNum = parseInt($('#m-car').find('.swiper-container').length); //绑定车的数量
+    console.log(carNum);
+
+    //车辆列表
+    var token = getCookie("token");
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_list'),
+        dataType : "json",  
+        data: {
+            token: token
+        },
+        async: false,
+        success: function(data){
+            if(data.error_code == 200){
+              window.location.href = preUrl('login/login.html'+ para +'&path=index/pay.html');
+            }else if(data.success){
+                var html = template('car-item', data.infor);
+
+                //车辆绑定modal
+                $('.j-car').on('click',function(){
+                    $('#m-car').modal();
+                    $('#car-list').html(html);
+
+                    
+                    //删除按钮设置高度
+                    $('.swiper-container').each(function(){
+                        var h = $(this).find('.base-item').outerHeight();
+                        $(this).find('.del-btn').css('height',h+'px');
+                    });
+
+                    //车辆删除
+                    $('.del-btn').each(function(){
+                        console.log('ok');
+                        var that = $(this);
+                        that.on('click',function(){
+                            var id = $(this).parents('.swiper-container').attr('data');
+                            $.ajax({
+                                type: 'post',
+                                url: reqUrl('car_oper'),
+                                dataType : "json",  
+                                data: {
+                                    token: token,
+                                    id: id,
+                                    type: 1
+                                },
+                                success: function(data){
+                                    if(data.error_code == 200){
+                                       window.location.href = preUrl('login/login.html'+ para +'&path=index/pay.html');
+                                    }else if(data.success){
+                                        //location.reload() ;
+                                        
+                                    }else{
+                                        mask(data.msg);
+                                    }
+                                }
+                            });
+                        });
+                    });
+
+                    //选择加气车辆
+                    var infoArr = [];//保存所选车辆信息
+                    $('.swiper-container').each(function(){
+                        var that = $(this);
+                        that.on('click',function(){
+                            $(this).find('.icon-right').show();
+                            $(this).find('.car-info').addClass('active');
+                            
+                            var item = {
+                                id: $(this).attr('data'),
+                                color: $(this).find('.j-color').html(),
+                                no: $(this).find('.j-no').html(),
+                                type: $(this).find('.j-type').html(),
+                            }
+                            infoArr.push(item);
+                        });
+                    });
+
+                    $('.j-save').on('click',function(e){
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        var content = '';
+                        for(var i=0; i<infoArr.length; i++){
+                            content += '<div class="base-item" data="'+ infoArr[i].id +'">'+ infoArr[i].no +'  '+ infoArr[i].color +'  '+ infoArr[i].type +'</div>';
+                        }
+                        $('.car-wrap').html(content);
+
+                        $('#m-car').modal('close');
+                    });
+
+                });
+   
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    //取得余额支付处余额的值
+    $.ajax({
+        type: 'POST',
+        url: reqUrl('client_get'),
+        data:{
+            token: token
+        },
+        dataType: 'json',
+        success: function(data){
+            console.log(data.msg);
+            if(data.error_code == 200){
+                window.location.href = preUrl('login/login.html'+ para +'&path=index/pay.html');
+            }else if(data.success){
+                var content = '余额<span class="c-red">￥'+ data.infor[0].balance +'</span>';
+                $('#balance').html(content);
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    //确定支付
+    $('#j-pay').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        //所选车辆的id数组
+        var idArr = [];
+        $('.car-wrap .base-item').each(function(){
+            idArr.push($(this).attr('data'));
+        });
+        if(idArr.length == 0){
+            mask('请绑定车辆信息');
+            return;
+        }
+
+        //输入金额
+        var price = $('#pay-fee').val();        
+        if(isNaN(price)){
+            mask('请输入金额数字');
+            return;
+        }
+
+        //天然气订单
+        var gastype = $('input:radio[name="type"]:checked').val();//选择的天然气类型
+
+        var orderid;
+        $.ajax({
+            type: 'POST',
+            url: reqUrl('gas_order_add'),
+            data:{
+                token: token,
+                type: 1,
+                station_id: GetQueryString('id'),
+                count: 0,
+                goods_name: gastype=="1"?"CNG":"LNG",
+                car_ids: idArr.join(),
+                price: price
+            },
+            dataType: 'json',
+            async : false ,//同步
+            success: function(data){
+                if(data.error_code == 200){
+                  window.location.href = preUrl('login/login.html'+ para +'?path=index/pay.html');
+                }else if(data.success){
+                    console.log(data.msg);
+                    console.log();
+                    orderid = data.infor[0].orderid;                    
+
+                }else{
+                    mask(data.msg);
+                }
+            }
+        });
+
+        //支付方式
+        var paytype = $('input:radio[name="pay-way"]:checked').val();
+
+        if(typeof(gastype)=="undefined"){
+            mask('请选择天然气类型');
+        }else if(price==''){
+            mask('请输入付款金额');
+        }else if(!paytype){
+            mask('请选择支付方式');
+        }else if(paytype == 1){
+            
+            $('#m-pay').modal({
+                relatedTarget: this,
+                onConfirm: function(){
+                    console.log($('#psw').val());
+                    var psw = hex_md5('cb08bd3a57be55c375040ec59f343e8e' + hex_md5($("#psw").val()));
+                    $.ajax({
+                        type: 'POST',
+                        url: reqUrl('yuepay'),
+                        data:{
+                            token: token,
+                            keytype: 1,
+                            keyid: orderid,
+                            price: price,
+                            paypassword: psw
+                        },
+                        dataType: 'json',
+                        async : false ,//同步
+                        success: function(data){
+                            if(data.success){
+                                mask('支付成功');
+                                setTimeout(function(){
+                                    window.location.href = preUrl('my/gas_order.html?status=0');
+                                },1000);
+                            }else{
+                                mask(data.msg);
+                            }
+                        }
+                    });
+                }
+            });
+            
+        }else if(paytype == 2){
+            //微信支付
+            window.location.href = preUrl('pay/wechat_pay.html?keytype=1&price='+ price +'&keyid='+ orderid);
+        }
+
+          
+    });
+
+});
+
+function starLevel(){
+    var result = '';
+    for( var i=0; i<GetQueryString('star_level'); i++){
+        result += '<i class="icon-star active"></i>';
+    }
+    for( var i=0; i<(5-GetQueryString('star_level')); i++){
+        result += '<i class="icon-star"></i>';
+    }
+    return result;
+}
+
+</script>       
+</body>
+</html>

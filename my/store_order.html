@@ -1,0 +1,363 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+  <style type="text/css">
+      .order-wrap .station-img{
+            margin-top: 0;
+      }
+  </style>
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header "> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">便利店订单</h1>
+</header>
+<div class="container">    
+
+    <ul class="am-avg-sm-4 news-nav">
+        <li><a href="javascript:location.href=preUrl('my/store_order.html?status=0')">全部</a></li>
+        <li><a href="javascript:location.href=preUrl('my/store_order.html?status=2')">待付款</a></li>
+        <li><a href="javascript:location.href=preUrl('my/store_order.html?status=3')">待核销</a></li>
+        <li><a href="javascript:location.href=preUrl('my/store_order.html?status=4')">待评价</a></li>
+    </ul>
+
+    <div class="j-order-list">
+        
+    </div>
+    
+    <div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+          <div class="am-modal-dialog">
+                <div class="am-modal-hd">
+                  <div class="am-modal-title am-cf">
+                    <span>选择支付方式</span>
+                    <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                  </div>
+                </div>
+                <form>
+                    <div class="am-modal-bd am-pay">
+                       <div class="payAll">
+                           <div class="am-payTotal am-cf">
+                             <i class="am-fl">支付金额：</i>
+                             <i class="am-fl">￥</i>
+                             <span class="am-fl paymoney">{$totalprice}</span>
+                           </div>
+                           <input value="" id="orderid" style="">
+                           <div class="account am-cf">
+                            <input type="radio" name="pay" class="mt am-fl" value="1"/>
+                            <span class="am-fl">账户余额支付</span>
+                            <span class="am-fl">（ 当前余额<i id="fee">￥{$myinfo.feeaccount}</i>）</span>
+                           </div>
+                           <div class="account am-cf">
+                            <input type="radio" name="pay" class="mt am-fl" value="2"/>
+                            <span class="am-fl">储值卡支付</span>
+                            <span class="am-fl">（ 当前余额<i id="deb">￥{$myinfo.debitaccound}</i>）</span>
+                           </div>
+                            <div class="account am-cf">
+                            <span class="am-fl">支付密码</span>
+                            <span class="am-fl"><input type="password" name="password" id="password" class="mt am-fl"></span>
+                           </div>
+                           <div class="am-otherway am-cf">
+                             <span class="am-fl">其他支付方式</span>
+                           </div>
+                           <div class="am-wechatpay am-cf">
+                             <input type="radio" name="pay"  class="mt am-fl" onclick="sub();"/>
+                             <img src="__PUBLIC__/imagesat.png" alt="" class="am-fl"/>
+                             <i class="am-fl">微信支付</i>
+                           </div>
+                           <div class="am-wechatpay am-cf">
+                             <input type="radio" name="pay"  class="mt am-fl"/>
+                             <img src="__PUBLIC__/images/yinlian.png" alt="" class="am-fl"/>
+                             <i class="am-fl">银联支付</i>
+                           </div>
+                           <div class="am-wechatpay am-cf">
+                             <input type="radio" name="pay" class="mt am-fl"/>
+                             <img src="__PUBLIC__/images/Alipay.png" alt="" class="am-fl"/>
+                             <i class="am-fl">支付宝支付</i>
+                           </div>
+                       </div>
+                    </div>
+                     <a class="am-btn am-btn-primary" style="background-color: #c21616;border-color: #c21616; width: 200px;height: 40px"onclick="feeaccount_remove();">立即支付</a>
+                </form>
+          </div>
+    </div>
+
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="order-item">
+    {{each listItems as value i}}
+        <div class="base-wrap order-wrap" data="{{value.id}}">
+            <div class="base-item am-text-xs">订单号：{{value.order_no}} 
+                {{if value.status=="2"}}
+                <a class="am-fr c-blue" href="#">待付款</a>
+                {{else if value.status == 3}}
+                <a class="am-fr c-blue" href="#">待核销</a>
+                {{else if value.status == 4}}
+                <a class="am-fr c-blue" href="#">待评价</a>
+                {{else if value.status == 5}}
+                <a class="am-fr c-grey" href="#">已完成</a>
+                {{/if}}
+            </div>
+            
+            <div class="base-item am-cf"> 
+                <a class="am-block" href="javascript:location.href=preUrl('my/store_order_detail.html?id={{value.id}}')">        
+                    <div class="station-img">
+                        <img src="{{value.goods_img?value.goods_img:"../assets/i/c1.jpg"}}">
+                    </div>
+                    <div class="goods-item">
+                        <h4 class="am-text-truncate">{{value.goods_name}}</h4>
+                        <div class="am-text-default"><span>￥{{value.unit_price}} </span> <span class="am-text-xs am-padding-left">x<b>{{value.count}}</b></span> </div>
+                        <div class="am-margin-top-xs"><span class="am-text-xs c-grey">{{value.goods_brief}}</span></div>
+                    </div>
+                </a>         
+            </div>
+            <div class="base-item active am-text-xs">
+                <a class="am-block" href="javascript:location.href=preUrl('my/store_order_detail.html?id={{value.id}}')">
+                    领取加气站：<span>{{value.station_name}}</span>
+                </a>
+            </div>
+            </a>
+            {{if value.status != 1}}    
+                <div class="base-item active am-cf">
+                    总额：<span>￥{{value.price}}</span>
+                    {{if value.status == 2}}
+                        <a class="am-fr black-btn" href="javascript:location.href=preUrl('my/store_pay.html?id={{value.id}}&price={{value.price}}&type=3')">去付款</a>
+                    {{else if value.status == 4}}
+                    <a class="am-fr black-btn" href="javascript:location.href=preUrl('my/store_comment.html?id={{value.id}}&type=3')">去评价</a>
+                    {{else if value.status == 5}}
+                    <a class="am-fr black-btn active j-del" href="#">删除订单</a>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+$(function(){
+
+    //判断tab的active状态
+    if(GetQueryString('status')==0){
+        $('.news-nav li').eq(0).addClass('active');
+    }else if(GetQueryString('status')==2){
+        $('.news-nav li').eq(1).addClass('active');
+    }else if(GetQueryString('status')==3){
+        $('.news-nav li').eq(2).addClass('active');
+    }else if(GetQueryString('status')==4){
+        $('.news-nav li').eq(3).addClass('active');
+    }
+
+
+    var para = window.location.search;
+
+
+    //显示页面内容
+    var token = getCookie("token");
+
+    var page = 0;
+    var $dropload = $('.container').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadUpFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('order_list'),
+                data:{
+                    token: token,
+                    page: page,
+                    status: GetQueryString('status'),
+                    type: 3
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+
+                        console.log('ok');
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/store_order.html');
+                    }else if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+                        if(arrLen > 0){                                               
+                            //判断
+                            var st = GetQueryString('status');//订单状态
+
+                            switch( st ){
+                                case "2": //待付款 
+                                    data.infor.listItems = orderArr("1", data.infor.listItems);
+                                    break;
+                                case "3": //待核销
+                                    data.infor.listItems = orderArr("2", data.infor.listItems);
+                                    break;
+                                case "4": //待评价
+                                    data.infor.listItems = orderArr("4", data.infor.listItems);
+                                    break;
+                                default:
+                                    console.log('error');   
+                            }
+
+                            //预编译模板
+                            var content = template('order-item', data.infor); 
+                            
+                        }else{
+
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        $('.j-order-list').append(content);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('order_list'),
+                data:{
+                    token: token,
+                    page: page,
+                    status: 0,
+                    type: 3
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/appoint_order.html');
+                    }else if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+                        if(arrLen > 0){
+                            //判断
+                            var st = GetQueryString('status');//订单状态
+
+                            switch( st ){
+                                case "2": //待付款 
+                                    data.infor.listItems = orderArr("2", data.infor.listItems);
+                                    break;
+                                case "3": //待核销
+                                    data.infor.listItems = orderArr("3", data.infor.listItems);
+                                    break;
+                                case "4": //待评价
+                                    data.infor.listItems = orderArr("4", data.infor.listItems);
+                                    break;
+                                default:
+                                    console.log('error');   
+                            }
+ 
+
+                             //预编译模板
+                            var content = template('order-item', data.infor);
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+
+                        $('.j-order-list').append(content);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }
+        
+    });
+
+    //删除订单
+
+    $('.j-order-list').on('click',function(e){        
+        var orderId = $(e.target).parents('.order-wrap').attr('data');
+        console.log(orderId);
+        var cls = e.target.className;
+        console.log(cls);
+        if(cls == 'am-fr black-btn active j-del'){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('oper_order'),
+                data:{
+                    token: token,
+                    order_id: orderId,
+                    type: 1
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/store_order.html');
+                    }else if(data.success){
+                        console.log(data.msg);
+                        mask('删除成功');
+                        setTimeout(function(){
+                            location.reload(); 
+                        },1000);
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }      
+    });
+
+
+    
+
+});
+
+function orderArr(status, arr){
+    var comArr = [];
+    for ( var i=0; i<arr.length; i++ ){
+        if(arr[i].status == status){
+            comArr.push(arr[i]);
+        }
+    }
+
+    return comArr;
+}
+
+</script>
+
+
+</body>
+</html>

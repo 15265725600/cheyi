@@ -1,0 +1,401 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+  <style type="text/css">
+      .order-wrap .station-img{
+            margin-top: 0;
+      }
+  </style>
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header "> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">外卖预定订单</h1>
+</header>
+<div class="container">    
+
+    <ul class="am-avg-sm-4 news-nav">
+        <li><a href="javascript:location.href=preUrl('my/sell_order.html?status=0')">全部</a></li>
+        <li><a href="javascript:location.href=preUrl('my/sell_order.html?status=2')">待付款</a></li>
+        <li><a href="javascript:location.href=preUrl('my/sell_order.html?status=3')">待取餐</a></li>
+        <li><a href="javascript:location.href=preUrl('my/sell_order.html?status=4')">待评价</a></li>
+    </ul>
+
+    <div class="j-order-list"></div>
+    
+    <!-- 待付款 -->
+    <!-- <div class="base-wrap order-wrap">
+        <div class="base-item am-text-xs">订单号：1234567890 <a class="am-fr c-blue" href="#">待付款</a></div>
+        <div class="base-item am-cf">
+            <a class="am-block" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                </div>
+                <div class="goods-item am-padding-top-sm">
+                    <h4 class="am-text-truncate">精品盒饭</h4>
+                    <div class="am-text-default"><span>￥12.00 </span> <span class="am-text-xs am-padding-left">x<b>1</b></span> </div>
+                </div>
+            </a>
+        </div>
+        <div class="base-item active am-text-xs">
+            <div class="am-padding-bottom-xs">预定时间：2016/01/15  10:25 </div>
+            <div>领取加气站：<span>中国石油济南第2加气站</span></div>
+        </div>
+        <div class="base-item active c-black">
+            总额：<span>￥499.00</span>
+            <a class="am-fr black-btn" href="#">去付款</a>
+        </div>
+    </div> -->
+    
+    <!-- 待取餐 -->
+    <!-- <div class="base-wrap order-wrap">
+        <div class="base-item am-text-xs">订单号：1234567890 <a class="am-fr c-blue" href="#">待取餐</a></div>
+        <div class="base-item am-cf">
+            <a class="am-block" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                </div>
+                <div class="goods-item am-padding-top-sm">
+                    <h4 class="am-text-truncate">精品盒饭</h4>
+                    <div class="am-text-default"><span>￥12.00 </span> <span class="am-text-xs am-padding-left">x<b>1</b></span> </div>
+                </div>
+            </a>
+        </div>
+        <div class="base-item active am-text-xs">
+            <div class="am-padding-bottom-xs">预定时间：2016/01/15  10:25 </div>
+            <div>领取加气站：<span>中国石油济南第2加气站</span></div>
+        </div>
+        <div class="base-item active c-black">
+            总额：<span>￥499.00</span>
+        </div>
+    </div> -->
+
+    <!-- 待评价 -->
+    <!-- <div class="base-wrap order-wrap">
+        <div class="base-item am-text-xs">订单号：1234567890 <a class="am-fr c-blue" href="#">待评价</a></div>
+        <div class="base-item am-cf">
+            <a class="am-block" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                </div>
+                <div class="goods-item am-padding-top-sm">
+                    <h4 class="am-text-truncate">精品盒饭</h4>
+                    <div class="am-text-default"><span>￥12.00 </span> <span class="am-text-xs am-padding-left">x<b>1</b></span> </div>
+                </div>
+            </a>
+        </div>
+        <div class="base-item active am-text-xs">
+            <div class="am-padding-bottom-xs">预定时间：2016/01/15  10:25 </div>
+            <div>领取加气站：<span>中国石油济南第2加气站</span></div>
+        </div>
+        <div class="base-item active c-black">
+            总额：<span>￥499.00</span>
+            <a class="am-fr black-btn" href="#">去评价</a>
+        </div>
+    </div> -->
+
+    <!-- 已完成 -->
+    <!-- <div class="base-wrap order-wrap">
+        <div class="base-item am-text-xs">订单号：1234567890 <a class="am-fr c-grey" href="#">已完成</a></div>
+        <div class="base-item am-cf">
+            <a class="am-block" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                </div>
+                <div class="goods-item am-padding-top-sm">
+                    <h4 class="am-text-truncate">精品盒饭</h4>
+                    <div class="am-text-default"><span>￥12.00 </span> <span class="am-text-xs am-padding-left">x<b>1</b></span> </div>
+                </div>
+            </a>
+        </div>
+        <div class="base-item active am-text-xs">
+            <div class="am-padding-bottom-xs">预定时间：2016/01/15  10:25 </div>
+            <div>领取加气站：<span>中国石油济南第2加气站</span></div>
+        </div>
+        <div class="base-item active c-block">
+            总额：<span>￥499.00</span>
+            <a class="am-fr black-btn active" href="#">删除订单</a>
+        </div>
+    </div> -->
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="order-item">
+    {{each listItems as value i}}
+        <div class="base-wrap order-wrap" data="{{value.id}}">
+            <div class="base-item am-text-xs">订单号：{{value.order_no}} 
+                {{if value.status=="2"}}
+                <a class="am-fr c-blue" href="#">待付款</a>
+                {{else if value.status == 3}}
+                <a class="am-fr c-blue" href="#">待取餐</a>
+                {{else if value.status == 4}}
+                <a class="am-fr c-blue" href="#">待评价</a>
+                {{else if value.status == 5}}
+                <a class="am-fr c-grey" href="#">已完成</a>
+                {{/if}}
+            </div>     
+            <div class="base-item am-cf"> 
+                <a class="am-block" href="javascript:location.href=preUrl('my/sell_order_detail.html?id={{value.id}}')">        
+                    <div class="station-img">
+                        <img src="{{value.goods_img?value.goods_img:"../assets/i/c1.jpg"}}">
+                    </div>
+                    <div class="goods-item">
+                        <h4 class="am-text-truncate">{{value.goods_name}}</h4>
+                        <div class="am-text-default"><span>￥{{value.unit_price}} </span> <span class="am-text-xs am-padding-left">x<b>{{value.count}}</b></span> </div>
+                        <div class="am-margin-top-xs"><span class="am-text-xs c-grey">{{value.goods_brief}}</span></div>
+                    </div> 
+                </a>        
+            </div>
+            <div class="base-item active am-text-xs">
+                <a class="am-block" href="javascript:location.href=preUrl('my/sell_order_detail.html?id={{value.id}}')">  
+                    <div class="am-padding-bottom-xs">预定时间：{{value.appointment}} </div>
+                    <div>领取加气站：<span>{{value.station_name}}</span></div>
+                </a>
+            </div>
+            
+            {{if value.status != 1}}    
+                <div class="base-item active am-cf">
+                    总额：<span>￥{{value.price}}</span>
+                    {{if value.status == 2}}
+                        <a class="am-fr black-btn" href="javascript:location.href=preUrl('my/sell_pay.html?id={{value.id}}&price={{value.price}}&type=4')">去付款</a>
+                    {{else if value.status == 4}}
+                    <a class="am-fr black-btn" href="javascript:location.href=preUrl('my/sell_comment.html?id={{value.id}}&type=4')">去评价</a>
+                    {{else if value.status == 5}}
+                    <a class="am-fr black-btn active j-del" href="#">删除订单</a>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+
+    //判断tab的active状态
+    if(GetQueryString('status')==0){
+        $('.news-nav li').eq(0).addClass('active');
+    }else if(GetQueryString('status')==2){
+        $('.news-nav li').eq(1).addClass('active');
+    }else if(GetQueryString('status')==3){
+        $('.news-nav li').eq(2).addClass('active');
+    }else if(GetQueryString('status')==4){
+        $('.news-nav li').eq(3).addClass('active');
+    }
+
+
+    var para = window.location.search;
+
+
+    //显示页面内容
+    var token = getCookie("token");
+
+    var page = 0;
+    var $dropload = $('.container').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadUpFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('order_list'),
+                data:{
+                    token: token,
+                    page: page,
+                    status: GetQueryString('status'),
+                    type: 4
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+
+                        console.log('ok');
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/store_order.html');
+                    }else if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+                        if(arrLen > 0){                                               
+                            //判断
+                            var st = GetQueryString('status');//订单状态
+
+                            switch( st ){
+                                case "2": //待付款 
+                                    data.infor.listItems = orderArr("1", data.infor.listItems);
+                                    break;
+                                case "3": //待取餐
+                                    data.infor.listItems = orderArr("2", data.infor.listItems);
+                                    break;
+                                case "4": //待评价
+                                    data.infor.listItems = orderArr("4", data.infor.listItems);
+                                    break;
+                                default:
+                                    console.log('error');   
+                            }
+
+                            //预编译模板
+                            var content = template('order-item', data.infor); 
+                            
+                        }else{
+
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        $('.j-order-list').append(content);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('order_list'),
+                data:{
+                    token: token,
+                    page: page,
+                    status: 0,
+                    type: 4
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/appoint_order.html');
+                    }else if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+                        if(arrLen > 0){
+                            //判断
+                            var st = GetQueryString('status');//订单状态
+
+                            switch( st ){
+                                case "2": //待付款 
+                                    data.infor.listItems = orderArr("2", data.infor.listItems);
+                                    break;
+                                case "3": //待核销
+                                    data.infor.listItems = orderArr("3", data.infor.listItems);
+                                    break;
+                                case "4": //待评价
+                                    data.infor.listItems = orderArr("4", data.infor.listItems);
+                                    break;
+                                default:
+                                    console.log('all');   
+                            }
+ 
+
+                             //预编译模板
+                            var content = template('order-item', data.infor);
+                        }else{
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+
+                        $('.j-order-list').append(content);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }
+        
+    });
+
+    //删除订单
+
+    $('.j-order-list').on('click',function(e){        
+        var orderId = $(e.target).parents('.order-wrap').attr('data');
+        console.log(orderId);
+        var cls = e.target.className;
+        console.log(cls);
+        if(cls == 'am-fr black-btn active j-del'){
+            $.ajax({
+                type: 'POST',
+                url: reqUrl('oper_order'),
+                data:{
+                    token: token,
+                    order_id: orderId,
+                    type: 1
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.error_code == 200){
+                        window.location.href = preUrl('login/login.html'+ para +'&path=my/store_order.html');
+                    }else if(data.success){
+                        console.log(data.msg);
+                        mask('删除成功');
+                        setTimeout(function(){
+                            location.reload(); 
+                        },1000);
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }      
+    });
+
+
+    
+
+});
+
+function orderArr(status, arr){
+    var comArr = [];
+    for ( var i=0; i<arr.length; i++ ){
+        if(arr[i].status == status){
+            comArr.push(arr[i]);
+        }
+    }
+
+    return comArr;
+}
+
+</script>
+
+
+
+</body>
+</html>

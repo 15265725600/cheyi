@@ -1,0 +1,249 @@
+//边框
+.border(@w:1px,@border_color: @border_grey){
+	border: @w solid @border_color;
+}
+.border-b(@w:1px,@border_color: @border_grey){
+	border-bottom: @w solid @border_color;
+}
+.border-t(@w:1px,@border_color: @border_grey){
+  border-top: @w solid @border_color;
+}
+.border-l(@w:1px,@border_color: @border_grey){
+  border-left: @w solid @border_color;
+}
+.border-r(@w:1px,@border_color: @border_grey){
+  border-right: @w solid @border_color;
+}
+
+//圆角
+.borderRadius(@radius:50%){ 
+	-moz-border-radius: @radius; 
+	-webkit-border-radius: @radius; 
+	border-radius: @radius; 
+} 
+//阴影
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+  box-shadow: @arguments;
+  -moz-box-shadow: @arguments;
+  -webkit-box-shadow: @arguments;
+}
+//转换为块元素
+.block(@w:80px,@h:40px,@ta:center,@c:#fff){
+	display: block;
+	width: @w;
+	height: @h;
+	line-height: @h;
+	text-align: @ta;
+	color: @c;
+}
+
+.size(@width; @height) {
+  width: @width;
+  height: @height;
+}
+
+
+// Center-align a block level element
+.center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+//定位居中
+.pos-box-cc(@w:600px,@h:360px,@pos:absolute){
+  width: @w;
+  height: @h;
+  position: @pos;
+  left: 50%;
+  top: 50%;
+  margin-left: -@w / 2;
+  margin-top: -@h / 2;
+}
+
+//过渡
+.transition(@time:0.3, @way: ease){
+	-webkit-transition: all @arguments;
+    -moz-transition: all @arguments;
+    -o-transition: all @arguments;
+    transition: all @arguments;
+}
+
+.transform(@way){
+	-webkit-transform: @way;
+	-moz-transform: @way;
+	-o-transform: @way;
+	transform: @way;
+}
+
+
+//三角
+.triangle(top,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color:  transparent transparent @c transparent;
+	border-style: dashed dashed solid dashed;
+}
+
+.triangle(bottom,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color: @c transparent transparent transparent;
+	border-style: solid dashed dashed dashed;
+}
+.triangle(left,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color:  transparent transparent @c transparent;
+	border-style: dashed dashed solid dashed;
+}
+.triangle(right,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color: @c transparent transparent transparent;
+	border-style: solid dashed dashed dashed;
+}
+.triangle(rt-bt,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color:  transparent @c @c transparent;
+	border-style: dashed solid solid dashed;
+}
+.triangle(rt-tt,@w:5px, @c:@grey_light){
+	border-width: @w;
+	border-color: @c @c transparent transparent;
+	border-style: solid solid dashed dashed;
+}
+
+.triangle(@_,@w:5px, @c:@grey_light){
+	width: 0;
+	height: 0;
+}
+
+
+//图标
+.icon(@width,@heihgt,@url){
+	display: inline-block;
+	width: @width;
+	height: @heihgt;
+	background: @url no-repeat center;
+}
+
+
+
+//清浮动
+.clearfix() {
+  *zoom: 1;
+  &:before,
+  &:after {
+    display: table;
+    content: "";
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+//单行...
+.text-overflow(@display: block) {
+  display: @display;
+  word-wrap: normal; /* for IE */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+//多行...
+.line-clamp(@lines, @line-height: 1.3em) {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @lines; // number of lines to show
+  overflow: hidden;
+  line-height: @line-height;
+  // max-height: @line-height * @lines;
+}
+
+
+// Caret - left
+// -----------------------------------------------------------------------------
+.caret-left(@size:6px; @color:#b4b4b4) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-right: @size solid @color;
+  border-top: @size solid transparent;
+  border-bottom: @size solid transparent;
+  border-left: 0 dotted;
+  transform: rotate(360deg);
+}
+
+// Caret - right
+// -----------------------------------------------------------------------------
+.caret-right(@size:6px; @color:#b4b4b4) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-left: @size solid @color;
+  border-top: @size solid transparent;
+  border-bottom: @size solid transparent;
+  border-right: 0 dotted;
+  transform: rotate(360deg);
+}
+
+// Caret - top
+// -----------------------------------------------------------------------------
+.caret-top(@size:6px; @color:#b4b4b4) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-right: @size solid transparent;
+  border-left: @size solid transparent;
+  border-bottom: @size solid @color;
+  border-top: 0 dotted;
+  transform: rotate(360deg);
+}
+// Caret - bottom
+// -----------------------------------------------------------------------------
+.caret-bottom(@size:6px; @color:#b4b4b4) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-right: @size solid transparent;
+  border-left: @size solid transparent;
+  border-top: @size solid @color;
+  border-bottom: 0 dotted;
+  transform: rotate(360deg);
+}
+
+//Caret - bottom and right
+//----------------------------------------------------------------------------
+.caret-br(@size:6px; @color:#b4b4b4) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-left: @size solid transparent;
+  border-right: @size solid @color;
+  border-bottom: @size solid @color;
+  border-top: @size solid transparent;
+  transform: rotate(360deg);
+}
+
+
+// CSS Arrow Mixin
+// -----------------------------------------------------------------------------
+//
+// @param:  45deg (default) - right
+//          135deg - down
+//          -45deg - up
+//          -135deg -left
+// ------------------------------------------------------------------------
+
+.arrow(@color:#DDD; @width:6px; @border-width: 2px; @deg: 45deg) {
+  display: inline-block;
+  width: @width;
+  height: @width;
+  border: @color solid;
+  border-width: @border-width @border-width 0 0;
+  transform: rotate(@deg);
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">加油站详情</h1>
+</header>
+<div class="container">
+
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="station-item">
+    <!-- 加油站列表 -->
+    <div class="station-wrap">
+        <div class="station-item">
+            <a class="am-block" href="#">
+                <div class="station-img">
+                    <img src="{{img?img:"../assets/i/c1.jpg"}}">
+                    <p>{{distance}}km</p>
+                </div>
+                <div class="station-cont am-padding-top-sm">
+                    <h4 class="am-text-truncate">{{name}}</h4>
+                    <div class="am-padding-top">
+                        {{if convenient_store=='1'}}
+                        <span class="gas-state">便利店</span> 
+                        {{/if}}
+                        {{if maintenance_point=='1'}}
+                            <span class="gas-state">维修点</span> 
+                        {{/if}}
+                        {{if status=='1'}}
+                            <span class="gas-state">营业</span>
+                        {{else}}
+                            <span class="gas-state active">停业</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- gas类型及价格 -->
+    <div class="base-wrap">
+        <ul class="am-avg-sm-3 am-padding-vertical am-text-center">
+            <li style="border-right: 1px solid #000;">
+                <div>92#</div>
+                <div class="c-red">5.90元/升</div>
+            </li>
+            <li style="border-right: 1px solid #000;">
+                <div>95#</div>
+                <div class="c-red">6.33元/升</div>
+            </li>
+            <li>
+                <div class="c-grey-light">- - #</div>
+                <div class="c-grey-light">- - 元/升</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 加气站简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>加油站简介：</h4>
+            <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=2&id={{id}}"></iframe>
+        </div>  
+    </div>
+    <!-- 地址及电话 -->
+    <div class="base-wrap">
+        <div class="base-item">
+            <a class="am-block" href="#">
+                <i class="icon-addr"></i>
+                <span>{{address}}</span>
+                <i class="am-fr c-grey-light">></i>
+            </a>
+        </div>
+        <div class="base-item">
+            <a class="am-block" href="tel:{{phone}}">
+                <i class="icon-phone"></i>
+                <span>{{phone}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+    $.ajax({
+        type: 'post',
+        url: reqUrl('station_detail'),
+        dataType : "json",  
+        data: {
+            id: GetQueryString('id'),
+            lng: GetQueryString('lng'),
+            lat: GetQueryString('lat')
+        },
+        success: function(data){
+            console.log(data.msg);
+            var html = template('station-item', data.infor[0]);
+            $('.container').html(html);
+        }
+    });
+    
+});
+</script>
+</body>
+</html>

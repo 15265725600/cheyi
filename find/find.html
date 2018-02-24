@@ -1,0 +1,126 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <h1 class="am-header-title">发现</h1>
+</header>
+<div class="container">
+    <!--  轮播图 -->
+     <div id="ad-slides"></div>
+
+    <div class="base-wrap">
+        <ul class="am-avg-sm-2 cy-nav">
+            <li><a href="javascript:location.href=preUrl('find/industry.html')"><img src="../assets/i/industry.jpg"></a></li>
+            <li><a href="javascript:location.href=preUrl('find/news.html?type=0')"><img src="../assets/i/news.jpg"></a></li>
+        </ul>
+    </div>
+
+    <ul class="am-avg-sm-2 find-nav">
+        <li><a href="javascript:location.href=preUrl('find/sell.html')"><img src="../assets/i/link-wm.jpg"></a></li>
+        <li><a href="javascript:location.href=preUrl('find/score.html')"><img src="../assets/i/link-jf.jpg"></a></li>
+        <li><a href="#"><img src="../assets/i/link-wz.jpg"></a></li>
+        <li><a href="javascript:location.href=preUrl('find/car_secure.html')"><img src="../assets/i/link-qc.jpg"></a></li>
+    </ul>
+
+    <!-- 工具栏 -->
+    <div class="am-navbar sc-navbar am-cf" id="">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <li>
+              <a href="javascript:location.href=preUrl('index/index.html')" class="">     
+                  <i class="icon-home"></i>   
+                  <span>首页</span>   
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('near/near.html')" class="">
+                  <i class="icon-near"></i>
+                  <span>附近</span>
+              </a>
+            </li>
+            <li class="active">
+              <a href="javascript:location.href=preUrl('find/find.html')" class="">        
+                  <i class="icon-find active"></i>
+                  <span>发现</span>           
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/myinfo.html')" class="">
+                  <i class="icon-my"></i>
+                  <span>我的</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/html" id="ad-item">
+    <div data-am-widget="slider" class="am-slider am-slider-default cy-slider "  >
+        <ul class="am-slides">
+            {{each listItems as value i }}
+                <li>
+                    <a href="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=0&id={{value.id}}"><img src="{{value.img}}"></a>             
+                </li>
+            {{/each}}
+        </ul>
+     </div>
+</script>
+
+<script type="text/javascript">
+$(function(){
+    $.ajax({
+        type: 'post',
+        url: reqUrl('ad_list'),
+        dataType : "json", 
+        data: {
+            type: 0,
+            city: '济南'
+        },
+        success: function(data){
+            if(data.success){
+                //预编译模板
+                var html = template('ad-item', data.infor);
+                $('#ad-slides').html(html);
+                //初始化slider
+                $('.am-slider').flexslider({
+                    directionNav: false
+                });
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

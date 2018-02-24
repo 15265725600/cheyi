@@ -1,0 +1,482 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<form action="" method="psot" class="am-form cy-form">
+<header data-am-widget="header" class="am-header cy-header "> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">个人资料</h1>
+    <div class="am-header-right am-header-nav">
+      <a class="j-save" href="#">保存</a>
+    </div>
+</header>
+
+<div class="container">
+    
+        <div class="file-wrap">
+            <img src="../assets/i/file-bg.jpg">
+            <div class="station-img" style="overflow: visible;">
+                <img class="avatar" src="../assets/i/avatar.jpg">
+                <input class="j-file"  name="temp_file" type="file" />
+                <i class="icon-jewel active"></i>
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label for="nickname">昵称</label>
+            <input class="am-padding-right-0" type="text" id="nickname" value="chenchen" />
+        </div>
+
+        <div class="am-form-group am-cf j-type">
+            <label>用户类型</label>
+            <span class="am-fr c-grey-light"> <b>个人用户</b> &gt; </span>         
+        </div>
+
+        <div class="am-form-group am-cf j-type">
+            <label>用户类型</label>
+            <span class="am-fr c-grey-light"> <b>企业用户</b> &gt; </span>         
+        </div>
+        <div class="upload-wrap" style="display: block;">
+            <div class="c-grey-light">上传相关证件图片(限3张)</div>
+            <ul class="upload am-cf">
+                <!-- <li><img src="../assets/i/upload.jpg"></li>
+                <li>
+                    <img src="../assets/i/upload.jpg">
+                    <i class="icon-close"></i>
+                </li> -->
+                <li class="upload-btn">
+                    <img src="../assets/i/upload.jpg">
+                    <input type="file" class="j-file-cert" name="temp_file" />
+                </li>
+            </ul>
+        </div> 
+
+        <div class="am-form-group am-cf" id="chose">
+            <label>用户地址</label>
+            <span class="am-fr c-grey-light"> <b id="j-city"> 山东省济南市历下区</b> &gt; </span>
+        </div>
+
+
+
+
+
+</div>
+</form>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/exif.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="detail-cont">
+    <div class="file-wrap">
+        <img src="../assets/i/file-bg.jpg">
+        <div class="station-img" style="overflow: visible;">
+            <img class="avatar" src="{{img?img:'../assets/i/avatar.jpg'}}">
+            <input class="j-file"  name="temp_file" type="file" />
+            <!-- 等级 -->
+            {{if level=="1"}}
+                <i class="icon-silver"></i>
+            {{else if level=="2"}}
+                <i class="icon-gold"></i>
+            {{else if level=="3"}}
+                <i class="icon-jewel"></i>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="am-form-group">
+        <label for="nickname">昵称</label>
+        <input class="am-padding-right-0" type="text" id="nickname" value="{{nickname}}" />
+    </div>
+    {{if type=="2"}}
+    <div class="am-form-group am-cf j-type" data="2">
+        <label>用户类型</label>
+        <span class="am-fr c-grey-light"> <b>个人用户</b> &gt; </span>         
+    </div>
+    {{else if type=="1"}}
+    <div class="am-form-group am-cf j-type" data="1">
+        <label>用户类型</label>
+        <span class="am-fr c-grey-light"> <b>企业用户</b> &gt; </span>         
+    </div>
+    <div class="upload-wrap" style="display: block;">
+        <div class="c-grey-light">上传相关证件图片(限3张)</div>
+        <ul class="upload am-cf">
+            {{each imgs.split(',') as value i}}
+            <li>
+                <img src="{{value}}">
+                <i class="icon-close"></i>
+            </li>
+            {{/each}}
+            <li class="upload-btn">
+                <img src="../assets/i/upload.jpg">
+                <input type="file" class="j-file-cert" name="temp_file" />
+            </li>
+        </ul>
+    </div> 
+    {{/if}}
+
+    <div class="am-form-group am-cf" id="chose">
+        <label>用户地址</label>
+        <span class="am-fr c-grey-light"> <b id="j-city"> {{district_name}} </b> &gt; </span>
+    </div>
+</script>
+
+<script type="text/javascript">
+$(function(){
+
+    var token = getCookie('token');
+
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("client_get"),
+        data:{
+            token: token
+        },
+        dataType: 'JSON',
+        async: false,
+        success:  function(data) {
+            if(data.error_code == 200){
+                window.location.href = preUrl('login/login.html?path=my/myinfo.html');
+            }else if(data.success){
+                console.log(data.infor);
+                var html = template('detail-cont', data.infor[0]);
+                $('.container').html(html);
+
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    //上传头像
+    $('.j-file').on('change',function(e){
+        if (!window.FileReader) return; 
+
+        e.stopPropagation();
+        e.preventDefault(); 
+      
+        var file = e.target.files[0];  
+        var content = '';
+   
+        if (!file.type.match('image.*')) {  
+            alert('文件'+ f.name + '不是图片') 
+            return;   
+        }   
+
+        var orientation;
+        //EXIF js 可以读取图片的元信息 https://github.com/exif-js/exif-js
+        EXIF.getData(file,function(){
+            orientation=EXIF.getTag(this,'Orientation');
+        });
+
+        var reader = new FileReader();  
+        
+        reader.onload = function(e){             
+            getImgData(this.result,orientation,function(data){
+                $.ajax({
+                    type: 'POST',
+                    url:  reqUrl("webfile_upload"),
+                    data:{
+                        keytype: 1,
+                        temp_file: data
+                    },
+                    dataType: 'JSON',
+                    async: false,
+                    success:  function(data) {
+                        console.log(data.msg);
+                        content = ' <img class="avatar" src="'+ data.infor[0].item1 +'">';
+                        console.log(data.infor[0].item1);
+                        $('.j-file').parent().find('img').replaceWith(content);     
+                    }
+                });  
+            });
+               
+        } 
+        reader.readAsDataURL(file); 
+        
+    });
+
+    //企业用户上传证件
+    var count = $('.upload li').length - 1;
+    $('.j-file-cert').on('change',function(e){
+        count++;
+        if(count < 4){
+            var that = $(this);
+            if (!window.FileReader) return; 
+
+            e.stopPropagation();e.preventDefault(); 
+          
+            var file = e.target.files[0];  
+            var content = '';
+
+         
+            
+            if (!file.type.match('image.*')) {  
+                alert('文件'+ f.name + '不是图片') 
+                return;   
+            }   
+
+            var orientation;
+            //EXIF js 可以读取图片的元信息 https://github.com/exif-js/exif-js
+            EXIF.getData(file,function(){
+                orientation=EXIF.getTag(this,'Orientation');
+            });
+
+            var reader = new FileReader();  
+            
+            reader.onload = function(e){             
+                    getImgData(this.result,orientation,function(data){
+                        $.ajax({
+                            type: 'POST',
+                            url:  reqUrl("webfile_upload"),
+                            data:{
+                                keytype: 2,
+                                temp_file: data
+                            },
+                            dataType: 'JSON',
+                            //async: false,
+                            success:  function(data) {
+                                console.log(data.msg);
+                                content = '<li>'+
+                                          '<img class="j-image" src="'+ data.infor[0].item1 +'">'+
+                                          '<i class="icon-close"></i>'+
+                                          '</li>'
+
+                                that.parent().before(content);    
+                            }
+                        });  
+                    });
+                   
+            } 
+            reader.readAsDataURL(file); 
+        }else{
+            mask('最多传3张证件图片');
+            count = 3;
+            return false;
+        }
+        
+        
+    });
+
+    //删除上传图片
+    $('.upload').on('click','.icon-close',function(){
+        $(this).parent().remove();
+        count--;
+    });
+
+
+
+    //获取城市列表
+    var city = [];
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("district_all_get"),
+        dataType: 'JSON',
+        async: false,
+        success:  function(data) {
+            console.log(data.msg);
+            city = data.infor.listItems;
+        }
+    });
+
+
+    //城市选择
+    var cityId = [];
+    var nameEl = document.getElementById('chose');
+    var jcity = document.getElementById('j-city');
+
+    var first = []; /* 省，直辖市 */
+    var second = []; /* 市 */
+    var third = []; /* 镇 */
+
+    var checked = [0, 0, 0]; /* 已选选项 */
+
+    function creatList(obj, list){
+        obj.forEach(function(item, index, arr){
+            var temp = new Object();
+            temp.text = item.name;
+            temp.value = item.id;
+            list.push(temp);
+        })
+    }
+
+    creatList(city, first); // 省
+
+    if (city[0].hasOwnProperty('children')) {
+        creatList(city[0].children, second);//市
+    } else {
+      second = [{text: '', value: 0}];
+    }
+
+
+    if (city[0].children[0].hasOwnProperty('children')) {
+      creatList(city[0].children[0].children, third);//区
+    } else {
+      third = [{text: '', value: 0}];
+    }
+
+
+    var picker = new Picker({
+        data: [first, second, third],
+        selectedIndex: [0, 0, 0],
+        title: ''
+    });
+
+    picker.on('picker.select', function (selectedVal, selectedIndex) {
+      var text1 = first[selectedIndex[0]].text;
+      var text2 = second[selectedIndex[1]].text;
+      var text3 = third[selectedIndex[2]] ? third[selectedIndex[2]].text : '';
+
+      jcity.innerHTML = text1 + ' ' + text2 + ' ' + text3;
+    });
+
+    picker.on('picker.change', function (index, selectedIndex) {
+      if (index === 0){
+          firstChange();
+      } else if (index === 1) {
+          secondChange();
+      }
+
+      function firstChange() {
+          second = [];
+          third = [];
+          checked[0] = selectedIndex;
+          var firstCity = city[selectedIndex];
+          if (firstCity.hasOwnProperty('children')) {
+            creatList(firstCity.children, second);
+            
+            var secondCity = city[selectedIndex].children[0]
+            if (secondCity.hasOwnProperty('children')) {
+              creatList(secondCity.children, third);
+            } else {
+              third = [{text: '', value: 0}];
+              checked[2] = 0;
+            }
+          } else {
+            second = [{text: '', value: 0}];
+            third = [{text: '', value: 0}];
+            checked[1] = 0;
+            checked[2] = 0;
+          }
+          
+          picker.refillColumn(1, second);
+          picker.refillColumn(2, third);
+          picker.scrollColumn(1, 0)
+          picker.scrollColumn(2, 0)
+      }
+
+      function secondChange() {
+          third = [];
+          checked[1] = selectedIndex;
+          var first_index = checked[0];
+          if (city[first_index].children[selectedIndex].hasOwnProperty('children')) {
+            var secondCity = city[first_index].children[selectedIndex];
+            creatList(secondCity.children, third);
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          } else {
+            third = [{text: '', value: 0}];
+            checked[2] = 0;
+            picker.refillColumn(2, third);
+            picker.scrollColumn(2, 0)
+          }
+      }
+
+    });
+
+    picker.on('picker.valuechange', function (selectedVal, selectedIndex) {
+        console.log(selectedVal);
+        cityId = selectedVal;
+        console.log(cityId);
+        console.log(selectedIndex);
+    });
+
+    nameEl.addEventListener('click', function () {
+        picker.show();
+    });
+
+
+    
+
+
+
+    //完善信息提交，调用注册接口
+
+
+    $('.j-save').on('click',function(e){
+        //用户类型
+
+        var type = $('.j-type').attr('data');
+        var avatar = $('.avatar').attr('src');
+        // 企业用户证件照
+        var imgArr = [];
+        $('.j-image').each(function () {
+            var that = $(this);
+            imgArr.push(that.attr('src'));
+        });
+        var imgSrc =  imgArr.join(',');
+
+        $.ajax({
+            type: 'POST',
+            url:  reqUrl("client_save"),
+            data: {
+                token: token,
+                nickname: $('#nickname').val(),
+                img: avatar,
+                imgs: imgSrc,
+                type: type,
+                province: cityId[0],
+                city: cityId[1],
+                county: cityId[2]
+            },
+            dataType: 'JSON',
+            async: false,
+            success:  function(data) {
+                console.log(data.msg);
+                if(data.success){
+                    window.location.href = preUrl('my/myinfo.html');
+                }else{
+                    mask(data.msg);
+                }
+                
+
+
+            }
+        });
+
+        return false;
+    });
+
+
+});
+</script>
+</body>
+</html>

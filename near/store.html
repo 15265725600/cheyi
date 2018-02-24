@@ -1,0 +1,180 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <form action="" class="search-form" method="post">
+        <div class="am-margin-vertical-xs">
+            <input id="keyWords" type="search" name="keyword" placeholder="请输入关键词搜索商品" required="">
+            <a class="j-search" href="#">搜索</a>
+        </div>
+    </form>
+</header>
+<div class="container">
+    <!-- 商品分类 -->
+    <ul class="am-avg-sm-4 sort-nav">
+        
+    </ul>
+    
+    <!-- 推荐商品 -->
+    <div class="recommend">
+        <h2 class="base-title"><span class="base-title-cont">推荐商品</span></h2>
+        <ul class="am-avg-sm-2 goods-wrap">
+            
+        </ul>
+    </div>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+
+<script type="text/html" id="goods-item">
+    {{each listItems as goods i}}
+        <li>
+            <a class="am-block goods-item" href="javascript:location.href=preUrl('near/store_goods_detail.html?id={{goods.id}}')">
+                <div class="station-img">
+                    <img src="{{goods.img}}">
+                    <p><span>已售 <b>{{goods.sales}}</b></span> <span class="c-orange am-fr">库存 <b>{{goods.count}}</b></span></p>
+                </div>
+                <div class="am-padding-xs">
+                    <h4 class="am-text-truncate">{{goods.goods_name}}</h4>
+                    <div class="am-text-default">￥{{goods.price}}</div>
+                    <span class="am-text-xs c-grey">{{goods.property}}</span>
+                </div>
+            </a>
+        </li>
+    {{/each}}
+</script>
+ 
+<script type="text/javascript">
+$(function(){
+    //商品分类
+    $.ajax({
+        type: 'post',
+        url: reqUrl('goods_type'),
+        dataType : "json",  
+        data: {
+            parentid: 0,
+            level: 1
+        },
+        success: function(data){
+            if(data.success){
+                var content = '';
+                data = data.infor.listItems;
+                var arrLen = data.length;
+                var path = 'near/store_goods_list.html';
+                for( var i = 0; i < arrLen; i++ ){
+                    content +=  '<li>'+
+                                '<a href="javascript:location.href=preUrl(\'near/store_goods_list.html?one_type='+ data[i].id +'&station_id='+ GetQueryString('id') +'\')">'+
+                                '<img src="'+ data[i].img +'"> '+ 
+                                '<div class="name">'+ data[i].name +'</div>'+
+                                ' </a>'+
+                                '</li>'
+                }
+
+                $('.sort-nav').html(content);
+
+            }else{
+                mask(data.msg);
+            }
+            
+        }
+    });
+
+    //获取推荐商品
+    var page = 0;
+    var $dropload = $('.recommend').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'post',
+                url: reqUrl('goods_list'),
+                dataType : "json",  
+                data: {
+                    station_id: GetQueryString('id'),
+                    is_promote: 1,
+                    sort: 0,
+                    one_type: '',
+                    two_type: '',
+                    page: page
+                },
+                success: function(data){
+                    if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+
+                        if(arrLen > 0){                                                
+                            //预编译模板
+                            var html =  template('goods-item', data.infor);
+        
+                        }else{
+
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        $('.goods-wrap').append(html);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }
+        
+    });
+
+    //搜索
+
+    $('.j-search').on('click',function(){
+        var keyword = $('#keyWords').val();
+
+        window.location.href = preUrl('near/store_search.html?id='+ GetQueryString('id') +'&keyword='+ escape(keyword));
+
+        return false;
+    });
+
+
+
+    
+});
+</script>
+</body>
+</html>

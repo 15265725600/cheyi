@@ -1,0 +1,152 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">添加车辆</h1>
+</header>
+<div class="container">
+    <form action="" method="post" class="am-form cy-form">               
+        <div class="am-form-group">
+            <label for="car-number">车牌号</label>
+            <input type="text" id="car-number" placeholder="请填写车牌号" />
+        </div>
+        <div class="am-form-group am-cf " id="j-cartype">
+            <label>车型</label>
+            <span class="am-fr c-grey-light"><b id="j-cartype-text">请选择车型</b> > </span>
+        </div>
+        <div class="am-form-group am-cf " id="j-color"> 
+            <label>颜色</label>
+            <span class="am-fr c-grey-light"><b id="j-color-text">请选择颜色</b> > </span>
+        </div>
+        <button class="am-btn j-save">保存</button>
+    </form>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    var para = window.location.search;
+
+    //添加  选择车型
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_type'),
+        dataType : "json",  
+        success: function(data){
+            if(data.success){
+                var nameEl1 = document.getElementById('j-cartype');
+                var valEl1 = document.getElementById('j-cartype-text');
+                var arrLen = data.infor.listItems.length;
+                var cartype = []; //车型的json数组
+                for(var i=1; i<=arrLen; i++){
+                    var item = {
+                        text: data.infor.listItems[i-1].name,
+                        value: i
+                    }
+                    cartype.push(item);
+                }
+                console.log(cartype);
+                pickerShow([cartype], nameEl1, valEl1, 1 , '');
+            }else{
+                mask(data.msg);
+            }
+        }
+    })
+
+    // 添加  选择车的颜色
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_color'),
+        dataType : "json",  
+        success: function(data){
+            if(data.success){
+                var nameEl2 = document.getElementById('j-color');//click对象
+                var valEl2 = document.getElementById('j-color-text');// 保存值
+                var arrLen = data.infor.listItems.length;
+                var carColor = [];//车型的json数组
+                for(var i=1; i<=arrLen; i++){
+                    var item = {
+                        text: data.infor.listItems[i-1].name,
+                        value: i
+                    }
+                    carColor.push(item);
+                }
+                console.log(carColor);
+                pickerShow([carColor], nameEl2, valEl2, 1 , '');
+            }else{
+                mask(data.msg);
+            }
+        }
+    });
+
+    $('.j-save').on('click',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var token = getCookie("token");
+        $.ajax({
+            type: 'POST',
+            url: reqUrl('car_save'),
+            data:{
+                token: token,
+                no: $('#car-number').val(),
+                type: $('#j-cartype-text').html(),
+                color: $('#j-color-text').html()
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.error_code == 200){
+                  window.location.href = preUrl('login/login.html'+ para +'&path=index/car_add.html');
+                }else if(data.success){
+                    if(GetQueryString('type')==1){
+                        window.location.href = preUrl('my/myinfo.html')+para;
+                    }else{
+                        window.location.href = preUrl('index/pay.html')+para;
+                    }
+                    
+                }else{
+                    mask(data.msg);
+                }
+            }
+
+        });
+    });
+});
+</script>
+
+</body>
+</html>

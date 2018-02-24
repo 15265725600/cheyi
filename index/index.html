@@ -1,0 +1,423 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<div class="container">
+    <div class="index-bg">
+        <div class="index-header">
+            <a class="j-city" id="curCity" href="#"><span id="tip"></span><i class="caret-bottom"></i></a>
+            <a class="am-fr" href="#">logo</a>
+        </div>
+        <!-- 加气 -->
+        <div class="index-center">
+            <a href="javascript:location.href=preUrl('index/gas_station.html')"><img class="plus" src="../assets/i/plus.png"></a>
+            <ul class="am-avg-sm-2 index-nav">
+                <li>
+                    <figure class="j-plus">
+                        <a href="javascript:location.href=preUrl('index/gas_appoint.html?city_id=')">
+                            <img class="icon" src="../assets/i/appoint.png">
+                            <figcaption>加气预约(LNG)</figcaption>
+                        </a>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <a href="javascript:location.href=preUrl('index/oil_station_line.html')">
+                            <img class="icon" src="../assets/i/line.png">
+                            <figcaption>加油站线路展示</figcaption>
+                        </a>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="am-navbar sc-navbar am-cf" id="">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <li class="active">
+              <a href="javascript:location.href=preUrl('index/index.html')">     
+                  <i class="icon-home active"></i>   
+                  <span>首页</span>   
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('near/near.html')" class="">
+                  <i class="icon-near"></i>
+                  <span>附近</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('find/find.html')" class="">  
+                  <i class="icon-find"></i>
+                  <span>发现</span>           
+              </a>
+            </li>
+            <li>
+              <a href="javascript:location.href=preUrl('my/myinfo.html')" class="">
+                  <i class="icon-my"></i>
+                  <span>我的</span>
+              </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 切换城市 -->
+    <div class="am-popup ly-popup" id="m-list">
+        <div class="am-popup-inner">
+          <div class="am-popup-hd"  style="z-index: 999; position: fixed;">
+            <div class="am-popup-hd">
+                <form action="" class="search-form" method="post">
+                    <div class="am-margin-vertical-xs">
+                        <input id="keyWords" type="search" name="keyword" placeholder="请输入城市名" required="">
+                        <a href="#">搜索</a>
+                    </div>
+                </form>
+                <span data-am-modal-close class="am-close">&times;</span>
+            </div>
+          </div>
+          <div class="am-popup-bd">
+              <!-- 最近定位、访问、热门城市 -->
+              <div class="loc-wrap"> 
+                  <div class="loc-item">定位城市：</div>
+                  <div class="loc-item"><a class="loc-city" href="#">济南</a></div>
+              </div> 
+              <!-- 城市列表 -->
+              <div class="city-wrap">
+                  <div class="city-item">
+                      <div class="stick">A</div>
+                      <p class="index-A">A</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山2</a></li>
+                          <li> <a href="#">鞍山3鞍山3</a></li>
+                          <li> <a href="#">鞍山4</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <div class="stick">B</div>
+                      <p class="index-B">B</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <div class="stick">C</div>
+                      <p class="index-C">C</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <div class="stick">D</div>
+                      <p class="index-D">D</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <div class="stick">E</div>
+                      <p class="index-E">E</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <p class="index-F">F</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <p>G</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+                  <div class="city-item">
+                      <p>H</p>
+                      <ul class="city-list">
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                          <li> <a href="#">鞍山1</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <!-- 首字母列表 -->
+        <ul class="alpha-list">
+            <li><a data='A' href="javascript:;">A</a></li>
+            <li><a data='B' href="javascript:;">B</a></li>
+            <li><a data='C' href="javascript:;">C</a></li>
+            <li><a data='D' href="javascript:;">D</a></li>
+            <li><a data='E' href="javascript:;">E</a></li>
+            <li><a data='F' href="javascript:;">F</a></li>
+            <li><a data='G' href="javascript:;">G</a></li>
+            <li><a data='H' href="javascript:;">H</a></li>
+            <li><a data='I' href="javascript:;">I</a></li>
+            <li><a data='J' href="javascript:;">J</a></li>
+            <li><a data='K' href="javascript:;">K</a></li>
+            <li><a data='L' href="javascript:;">L</a></li>
+            <li><a data='M' href="javascript:;">M</a></li>
+            <li><a data='N' href="javascript:;">N</a></li>
+            <li><a data='O' href="javascript:;">O</a></li>
+            <li><a data='P' href="javascript:;">P</a></li>
+            <li><a data='Q' href="javascript:;">Q</a></li>
+            <li><a data='R' href="javascript:;">R</a></li>
+            <li><a data='S' href="javascript:;">S</a></li>
+            <li><a data='T' href="javascript:;">T</a></li>
+            <li><a data='U' href="javascript:;">U</a></li>
+            <li><a data='V' href="javascript:;">V</a></li>
+            <li><a data='W' href="javascript:;">W</a></li>
+            <li><a data='X' href="javascript:;">X</a></li>
+            <li><a data='Y' href="javascript:;">Y</a></li>
+            <li><a data='Z' href="javascript:;">Z</a></li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25&plugin=AMap.CitySearch"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="city-item">
+    <div class="city-item">
+        <p>H</p>
+        <ul class="city-list">
+            <li> <a href="#">鞍山1</a></li>
+            <li> <a href="#">鞍山1</a></li>
+            <li> <a href="#">鞍山1</a></li>
+            <li> <a href="#">鞍山1</a></li>
+        </ul>
+    </div>
+</script>
+<script>
+$(function(){
+    //117.130977,36.657164
+    //首页背景高度
+    var oHeight = $(window).height() - 60;
+    $('.index-bg').height( oHeight );
+
+
+    //切换城市
+
+    //选择城市弹框中的搜索
+    $('.city-search').on('click',function(){
+        $(this).find('.tw-header-search').hide();
+        $(this).find('.ly-form').removeClass('am-hide');
+    });
+
+     var map = new AMap.Map('map',{
+        resizeEnable: true,    
+     });
+     showCityInfo() ;
+     
+
+    //获取用户所在城市信息
+    function showCityInfo() {
+        //实例化城市查询类
+        var citysearch = new AMap.CitySearch();
+        //自动获取用户IP，返回当前城市
+        citysearch.getLocalCity(function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                if (result && result.city && result.bounds) {
+                    var cityinfo = result.city;
+                    console.log(cityinfo);
+                    document.getElementById('tip').innerHTML = cityinfo;
+                    $('.loc-city').html(cityinfo);
+                    var city = $('#tip').html();
+
+                    setInfo('city_name', city);
+                    $.ajax({
+                        type: 'POST',
+                        url:  reqUrl("get_city_id"),
+                        data: {
+                            city: city
+                        },
+                        dataType: 'JSON',
+                        async: false,
+                        success:  function(data) {  
+                            if(data.success){
+                                console.log(data.msg);
+                                setInfo('city_id',data.infor[0].id);
+                                
+                                var content = '<a href="javascript:location.href=preUrl(\'index/gas_appoint.html?city_id='+ data.infor[0].id +'\')">'+
+                                              '<img class="icon" src="../assets/i/appoint.png">'+
+                                              '<figcaption>加气预约(LNG)</figcaption>'+
+                                              '</a>';
+
+                                $('.j-plus').html(content);
+                            }else{
+                                mask(data.msg);
+                            }
+                        }
+                    });
+
+                }
+            } else {
+                document.getElementById('tip').innerHTML = result.info;
+            }
+        });
+    }
+
+    //获得首字母相同的城市列表
+    $.ajax({
+        type: 'POST',
+        url:  reqUrl("district_web_get"),
+        dataType: 'JSON',
+        success:  function(data) {  
+            if(data.success){
+                console.log(data.infor.listItems);
+                var content = '';//字母+城市
+                
+                var cityArr = data.infor.listItems;
+
+                for(var i = 0; i < cityArr.length; i++){
+                    var result = '';//每个字母下城市列表html
+                    var cityList = cityArr[i].name.split(',');
+                    for(var j = 0; j < cityList.length; j++){
+                        result += '<li> <a href="#">'+ cityList[j] +'</a></li>';
+                    }
+                    content +='<div class="city-item">'+
+                                '<div class="stick">'+ cityArr[i].charindex +'</div>'+
+                                '<p class="index-'+ cityArr[i].charindex +'">'+ cityArr[i].charindex +'</p>'+
+                                '<ul class="city-list">'+ result +'</ul>'+
+                                '</div>';
+                }
+                $('.city-wrap').html(content);
+
+                //城市列表modal
+                $('#curCity').click(function(){
+                    $('#m-list').modal();
+                    // console.log($('#keyWords'));
+                    filterList($(".city-wrap"), $('#keyWords'));
+                });
+
+                //modal显示时执行  
+                $('#m-list').on('opened.modal.amui', function(){
+                    var arr = alphaArr();
+                    alphaList(arr);
+                });
+
+                //选择城市
+                $('.city-list a').on('click',function(){
+                    var text = $(this).text();
+                    $('#curCity').find('span').html(text);
+                    $('#m-list').modal('close'); 
+                });
+
+                
+
+            }else{
+                mask(data.msg);
+            }
+
+        }
+    });  
+
+
+    // 注册后完善资料若选择了车辆信息在此保存
+    if(GetQueryString('type') == 0){
+        var carArr = JSON.parse(getInfo('carArr'));
+        console.log(carArr);
+        var token = getCookie('token');
+        if(carArr.length > 0){
+            for(var i = 0; i < carArr.length; i++){
+                $.ajax({
+                    type: 'POST',
+                    url: reqUrl('car_save'),
+                    data:{
+                        token: token,
+                        no: carArr[i].no,
+                        type: carArr[i].type,
+                        color: carArr[i].color
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.success){
+                           console.log(data.msg);
+                            
+                        }else{
+                            mask(data.msg);
+                        }
+                    }
+
+                });
+            }
+        }
+
+        removeInfo('carArr');
+    }
+    
+
+});
+
+function filterList(list, ff) {
+    console.log(ff);
+    ff.change(function(){
+        var filter = $(this).val();
+
+        if(filter) {
+            $matches = $(list).find('a:Contains(' + filter + ')').parent();
+            $('li', list).not($matches).slideUp();
+            $matches.slideDown();
+        } else {
+            $(list).find("li").slideDown();
+        }
+        return false;
+    }).keyup( function () {
+        $(this).change();
+    });
+}
+
+</script>
+</body>
+</html>

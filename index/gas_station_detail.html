@@ -1,0 +1,457 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<div class="container" id="content">
+
+</div>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/picker.min.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/html" id="station-item">
+    <header data-am-widget="header" class="am-header cy-header n-border"> 
+        <div class="am-header-left am-header-nav">
+            <a class="icon-back" href="javascript:history.back()"></a>
+        </div> 
+        <h1 class="am-header-title">加气站详情</h1>
+        <div class="am-header-right am-header-nav">
+            <a class="icon-collect {{is_collection=="1"?'active':''}}" href="#"></a>
+            <!-- <a class="icon-share" href="#"></a> -->
+        </div>
+    </header>
+    <div class="station-wrap" id="station-wrap">
+        <div class="station-item">
+            <div class="station-img">
+                <img src="{{img}}">
+                <p>{{distance}}km</p>
+                {{if disconunt=='1'}}
+                <i class="icon-favor"></i>
+                {{/if}}
+            </div>
+            <div class="station-cont">
+                <h4 class="am-text-truncate">{{name}}</h4>
+                <div class="star-wrap">
+                    <p class="am-cf am-margin-0">   
+                        <i class="icon-star {{1<=star_level?'active':''}}"></i>
+                        <i class="icon-star {{2<=star_level?'active':''}}"></i> 
+                        <i class="icon-star {{3<=star_level?'active':''}}"></i>
+                        <i class="icon-star {{4<=star_level?'active':''}}"></i>
+                        <i class="icon-star {{5<=star_level?'active':''}}"></i>      
+                    </p> 
+                </div>
+                <div class="gas-type-wrap">
+                    {{each goods_name.split(',') as name i}}
+                        <span class="gas-type">{{name}}</span>
+                    {{/each}}
+                </div>
+                <a class="red-btn" href="javascript:location.href=preUrl('index/pay.html')+'?id={{id}}&name={{name}}&star_level={{star_level}}&img={{img}}'">立即支付</a>
+            </div>
+            <div class="am-padding-top-sm">
+                {{if convenient_store=='1'}}
+                        <span class="gas-state">便利店</span> 
+                {{/if}}
+                {{if maintenance_point=='1'}}
+                    <span class="gas-state">维修点</span> 
+                {{/if}}
+                {{if status=='1'}}
+                    <span class="gas-state">营业</span>
+                {{else}}
+                    <span class="gas-state active">停业</span>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <!-- 优惠 -->
+    <div class="base-wrap" id="favor">
+        {{include 'favor-cont'}}
+    </div>
+    <!-- gas类型及价格 -->
+    <div class="base-wrap">
+        <ul class="am-avg-sm-2 am-padding-vertical am-text-center">
+            <li style="border-right: 1px solid #000;">
+                <div>CNG</div>
+                <div class="c-red">
+                    {{if goods_price.split(',')[0]}}
+                        {{goods_price.split(',')[0]}}元/m³
+                    {{else}}
+                        无
+                    {{/if}}
+                </div>
+            </li>
+            <li style="border-right: 1px solid #000;">
+                <div>LNG</div>
+                <div class="c-red">
+                    {{if goods_price.split(',')[1]}}
+                        {{goods_price.split(',')[1]}}元/m³
+                    {{else}}
+                        无
+                    {{/if}}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 加气站简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>加气站简介：</h4>
+            <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=2&id={{id}}"></iframe>
+        </div>  
+    </div>
+    <!-- 地址及电话 -->
+    <div class="base-wrap">
+        <div class="base-item">
+            <a class="am-block" href="javascript:location.href=preUrl('index/line.html?address={{address}}&lng={{lng}}&lat={{lat}}&type=1')">
+                <i class="icon-addr"></i>
+                <span>{{address}}</span>
+                <i class="am-fr c-grey-light">></i>
+            </a>
+        </div>
+        <div class="base-item">
+            <a class="am-block" href="tel:{{phone}}">
+                <i class="icon-phone"></i>
+                <span>{{phone}}</span>
+            </a>
+        </div>
+    </div>
+    <ul class="am-avg-sm-2 cy-nav">
+        <li><a href="javascript:location.href=preUrl('near/store.html')+'?id={{id}}'"><img src="../assets/i/shop.jpg"></a></li>
+        <li><a href="javascript:location.href=preUrl('near/car_service.html')+'?id={{id}}'"><img src="../assets/i/service.jpg"></a></li>
+    </ul>
+
+    <!-- tab -->
+    <div class="am-tabs zh-tabs" data-am-tabs>
+        <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+          <li class="am-active"><a href="#tab-1">评价</a></li>
+          <li><a href="#tab-2">预约加气</a></li>
+          <li><a href="#tab-3">推荐小商品</a></li>
+        </ul>
+        <div class="am-tabs-bd am-tabs-bd-ofv">
+            <!-- 评论 -->
+            {{include "comment"}}
+            <!-- 预约加气 -->
+            <div class="am-tab-panel" id="tab-2">
+                <form action="" method="post" class="am-form cy-form">
+                    <div class="am-form-group am-cf" id="chose">
+                        <label for="time">预约时间</label>
+                        <span class="am-fr c-grey-light"><time id="time">请选择预约时间</time> > </span>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="addr">地点</label>
+                        <input type="text" id="addr" placeholder="请填写地点"/>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="count">总需气量(m³)</label>
+                        <input type="text" id="count" placeholder="请填写总需气量" />
+                    </div>
+                    <div class="am-padding">
+                        <textarea rows="10" id="remark" placeholder="请填写备注信息(限140字)"></textarea>
+                    </div>
+                    <button class="am-btn" id="j-appoint">提交预约申请</button>
+                    
+                </form>
+            </div>
+            <!-- 推荐小商品 -->
+            <div class="am-tab-panel" id="tab-3">
+                {{include "goods"}}      
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<!-- 优惠 -->
+<script type="text/html" id="favor-cont">
+    {{if disconunt=='0'}}
+        <div class="favor-item n-border">
+            <span>优惠</span>         
+            暂无优惠!     
+        </div>
+    {{else}}
+        <div class="favor-item">
+            <span>优惠</span>         
+            <b>{{disconunt_brief}}</b>       
+        </div>
+    {{/if}}
+
+    {{if disconunt=='1'}}
+    <div class="base-item c-red am-text-xs">{{disconunt_content}}</div>
+    {{/if}}
+</script>
+
+<!-- 评论 -->
+<script type="text/html" id="comment">
+    <div class="am-tab-panel am-active" id="tab-1">
+        <div class="info-hd">评价(<b>{{reviews}}</b>) <a class="am-fr c-grey-light" href="javascript:location.href=preUrl('index/comments.html?id={{id}}')">查看全部 ></a></div>
+        {{each reviews_list as review i}}
+            <div class="info-wrap">
+                <img src="{{review.client_img?review.client_img:"../assets/i/avatar.jpg"}}">
+                <div class="info-cont">
+                    <h2>{{review.client_name}} <time class="c-grey-light am-text-xs am-fr">{{review.createtime}}</time></h2>
+                    <div class="star-wrap">
+                        <p class="am-cf am-margin-0">
+                            <i class="icon-star {{1<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{2<=review.star?'active':''}}"></i> 
+                            <i class="icon-star {{3<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{4<=review.star?'active':''}}"></i>
+                            <i class="icon-star {{5<=review.star?'active':''}}"></i>
+                        </p> 
+                    </div>
+                    <p>{{review.content}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>
+
+<!-- 推荐小商品 -->
+<script type="text/html" id="goods">
+    <div class="info-hd">全部小商品(<b>{{goods_count}}</b>) <a class="am-fr c-grey-light" href="javascript:location.href=preUrl('index/goods_list.html?station_id={{id}}')">查看全部 ></a></div>
+
+    <ul class="am-avg-sm-2 goods-wrap">
+        {{each goods_list as goods i}}
+            <li>
+                <a class="am-block goods-item" href="#">
+                    <div class="station-img">
+                        <img src="{{goods.img}}">
+                        <p><span>已售 <b>{{goods.sales}}</b></span> <span class="c-orange am-fr">库存 <b>{{goods.count}}</b></span></p>
+                    </div>
+                    <div class="am-padding-xs">
+                        <h4 class="am-text-truncate">{{goods.goods_name}}</h4>
+                        <div class="am-text-default">￥{{goods.price}}</div>
+                        <span class="am-text-xs c-grey">{{goods.property}}</span>
+                    </div>
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+    var para = window.location.search;
+    //经纬度
+    var position = JSON.parse(getInfo('position'));
+
+    var token = getCookie("token");
+    //加气站详情数据
+    $.ajax({
+        type: 'post',
+        url: reqUrl('station_detail'),
+        dataType : "json",  
+        data: {
+            id: GetQueryString('id'),
+            lng: position.lng,
+            lat: position.lat
+        },
+        async: false,
+        success: function(data){
+            console.log(data.msg);
+            var html = template('station-item', data.infor[0]);
+            $('#content').html(html);
+
+            //收藏操作
+            $('.icon-collect ').on('click',function(){
+                var that = $(this);
+                if($(this).hasClass('active')){
+                    //取消收藏
+                    $.ajax({
+                        type: 'post',
+                        url: reqUrl('del_collection'),
+                        dataType : "json",  
+                        data: {
+                            token: token,
+                            station_id: GetQueryString('id'),
+                        },
+                        success: function(data){
+                            if(data.error_code == 200){
+                                window.location.href = preUrl('login/login.html'+ para +'&path=index/gas_station_detail.html');
+                            }else if(data.success){
+                                console.log(data.msg);
+                                that.removeClass('active');
+                                mask('取消收藏');
+                            }else{
+                                mask(data.msg);
+                            }
+                        }
+                    });
+                }else{
+                    //收藏
+                    $.ajax({
+                        type: 'post',
+                        url: reqUrl('add_collection'),
+                        dataType : "json",  
+                        data: {
+                            token: token,
+                            station_id: GetQueryString('id'),
+                        },
+                        success: function(data){
+                            if(data.error_code == 200){
+                                window.location.href = preUrl('login/login.html'+ para +'&path=index/gas_station_detail.html');
+                            }else if(data.success){
+                                console.log(data.msg);
+                                that.addClass('active');
+                                mask('收藏成功');
+                            }else{
+                                mask(data.msg);
+                            }
+                        }
+                    });
+                }
+
+                return false;
+            });
+        }
+    });
+
+    //预约加气时间选择
+    //时间选择
+
+    var nameEl = document.getElementById('chose');
+    var jtime = document.getElementById('time');
+
+
+    var first = []; /* 月日 */
+    var second = []; /* 时 */
+    var third = []; /* 分 */
+    var time; //提交传值时使用
+
+
+    var now = new Date(); // 这个算法能自动处理闰年和非闰年。2012年是闰年，所以2月有29号
+    var firstDay = new Date(now.getFullYear(),0,1);
+    var dateDiff = now - firstDay;
+    var diffDays = Math.ceil(dateDiff/ (1000 * 60 * 60 * 24)); //当期时间距离第一天的天数
+
+    var i = 0;
+    while (i < (366 - diffDays)) {
+        var day = (now.getMonth() + 1) + '月' + now.getDate() + '日';
+        var item = {
+            text: day,
+            value: i
+        }
+        first.push(item);
+        now = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 这个是关键！！！加上一天的毫秒数效果就是把日期往后推一天
+        i++;
+    }
+
+    for(var i = 1; i <= 24; i++){
+        var item = {
+            text: i + '时',
+            value: i
+        }
+        second.push(item);
+    }
+
+    for(var i = 1; i <= 60; i++){
+        var item = {
+            text: i + '分',
+            value: i
+        }
+        third.push(item);
+    }
+
+    var checked = [0, 0, 0]; /* 已选选项 */
+
+    var picker = new Picker({
+        data: [first, second, third],
+        selectedIndex: [0, 0, 0],
+        title: ''
+    });
+
+    picker.on('picker.select', function (selectedVal, selectedIndex) {
+      var text1 = first[selectedIndex[0]].text;
+      var text2 = second[selectedIndex[1]].text;
+      var text3 = third[selectedIndex[2]] ? third[selectedIndex[2]].text : '';
+
+      // var timeData = new Date().getFullYear() + text1;
+      var timeData = text1.replace(/[^0-9]+/g, ',') .split(',');
+      var month = plusZero(timeData[0]);
+      var day = plusZero(timeData[1]);
+
+      var hourData = text2.replace(/[^0-9]+/g, ',') .split(',');
+      var hour = plusZero(hourData[0]);
+
+      var minData = text3.replace(/[^0-9]+/g, ',') .split(',');
+      var min = plusZero(minData[0]);
+      //提交时使用此格式的时间值
+      time = new Date().getFullYear() + '/' + month + '/' + day + ' ' + hour + ':' + min;
+      console.log(time);
+      
+      function plusZero(data){
+           var t;
+           return t = data < 10? ("0" + data): data;
+      }
+
+      jtime.innerHTML = text1 + ' ' + text2;
+    });
+
+
+    nameEl.addEventListener('click', function () {
+        picker.show();
+    });
+
+
+    var station_id;//获取加气站id
+    $('.j-list').on('click',function(e){
+        station_id = $(e.target).attr('data');
+
+        $('.j-station b').html( e.target.innerHTML );
+        $('#m-station').modal('close');
+    });
+
+    //预约加气
+    $('#j-appoint').on('click',function(e){
+
+        e.stopPropagation();
+        e.preventDefault();
+
+        
+        $.ajax({
+            type: 'post',
+            url: reqUrl('gas_order_add'),
+            dataType : "json",  
+            data: {
+                token: token,
+                type: 2,
+                station_id: GetQueryString('id'),
+                count: $('#count').val(),
+                address: $('#addr').val() ,
+                appointment: time , 
+                remark: $('#remark').val(),
+                goods_name: "LNG"         
+            },
+            async: false,
+            success: function(data){
+                if(data.error_code == 200){
+                  window.location.href = preUrl('login/login.html?path=index/gas_station_detail.html');
+                }else if(data.success){
+                    window.location.href = preUrl('my/appoint_order.html?status=0');
+                }else{
+                    mask(data.msg);
+                }
+            }
+        });
+    });
+
+    
+});
+
+</script>
+</body>
+</html>

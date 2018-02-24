@@ -1,0 +1,228 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+  
+
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<div id="container" style="height:700px;">
+
+    <div class="spe-line">
+        <div class="am-text-center">
+            <a class="line-show" data='0' href="#"><i class="caret-bottom"></i></a>
+        </div>
+        <div class="transfer-item"></div>
+        <div id="wrapper">
+            <div id="scroller">
+                <ul class="line-list">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/iscroll.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25"></script> 
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/javascript">
+    
+
+$(function(){
+
+    //当前位置经纬度
+    var position = JSON.parse(getInfo('position'));
+
+    //终点经纬度
+    var aimLng = GetQueryString('lng');
+    var aimLat = GetQueryString('lat');
+
+    //终点位置
+    var endPot = {
+        lng: aimLng,
+        lat: aimLat
+    }
+
+    //路径规划类型   
+    var type = GetQueryString('type');
+
+    //声明地图
+    var map = new AMap.Map('container',{
+        center: [position.lng, position.lat],
+        zoom: 14
+    });
+
+    if( type == 1){ //1.公交
+        var transferData = getInfo('transferData');//公交路线信息
+        var line_id = parseInt(GetQueryString('line_id'));//公交路线id
+        var data = JSON.parse(transferData)[0]; //转换成数组
+         console.log(data);
+         console.log(line_id);
+         //var ways = data.plans[j].segments;
+         var line = way(data) ;
+         $('.transfer-item').html(line);
+
+         var lineContent = '';
+        //画折线地图
+        for(var i = 0; i < data.length; i++){
+            drawbusLine( position, endPot , data[i].transit.path, map );
+            if(data[i].transit_mode == "WALK"){
+                lineContent += '<li><i class="marker-foot"></i>'+ data[i].instruction +'</li>';
+            }else{
+                lineContent += '<li><i class="marker-bus"></i>'+ data[i].instruction +'</li>';
+            }
+            
+        }
+
+        $('.line-list').html(lineContent);
+
+    }else if( type == 2){//2.驾车
+        var driveData = getInfo('driveData');
+        //var data = JSON.parse(driveData)[0];
+        var allData = JSON.parse(driveData)[0];
+        var data = allData.steps;
+        console.log(allData);
+
+        var lineContent = '';
+
+        //画折线地图
+        for(var i = 0; i < data.length; i++){
+            drawbusLine( position, endPot , data[i].path, map );
+            lineContent += '<li><i class="marker-bus"></i>'+ data[i].instruction +'</li>';
+        }
+
+        $('.line-list').html(lineContent);
+
+        //路线内容
+        var topContent = allData.time/60 +'分钟 '+ allData.distance +' 米 ';
+
+        $('.transfer-item').html(topContent);
+
+    }else if( type == 3 ){//3.步行
+        var walkData = getInfo('walkData');
+        var allData = JSON.parse(walkData)[0];
+        var data = allData.steps;
+        console.log(allData);
+        var lineContent = '';
+    
+        //画折线地图
+        for(var i = 0; i < data.length; i++){
+            drawbusLine( position, endPot , data[i].path, map );
+
+            lineContent += '<li><i class="marker-foot"></i>'+ data[i].instruction +'</li>';
+        }
+
+        $('.line-list').html(lineContent);
+
+        //路线内容
+        var topContent = parseInt(allData.time/60) +'分钟 '+ allData.distance +' 米 ';
+
+        $('.transfer-item').html(topContent);
+
+
+    }
+
+
+    //具体路线信息
+    //内容滑动
+    var myScroll = new IScroll('#wrapper', { mouseWheel: true });
+
+    //显示与隐藏
+    $('.line-show').on('click',function(){
+        var data = parseInt($(this).attr('data'));
+        if(data == 0){
+            $('#wrapper').hide();
+            $(this).attr('data',1);
+            $(this).find('.caret-bottom').addClass('active');
+        }else{
+            $('#wrapper').show();
+            $(this).attr('data',0);
+            $(this).find('.caret-bottom').removedClass('active');
+        }
+    });
+
+
+
+      
+
+});
+
+function drawbusLine( startPot, endPot,  path, map) {
+    //绘制起点，终点
+    new AMap.Marker({
+        map: map,
+        position: [startPot.lng, startPot.lat], //基点位置
+        icon: "http://webapi.amap.com/theme/v1.3/markers/n/start.png",
+        zIndex: 10
+    });
+    new AMap.Marker({
+        map: map,
+        position: [endPot.lng, endPot.lat], //基点位置
+        icon: "http://webapi.amap.com/theme/v1.3/markers/n/end.png",
+        zIndex: 10
+    });
+    //绘制乘车的路线
+    var busPolyline = new AMap.Polyline({
+        map: map,
+        path: path,
+        strokeColor: "#09f",//线颜色
+        strokeOpacity: 0.8,//线透明度
+        strokeWeight: 6//线宽
+    });
+}
+
+//公交车每一条路线的公交车
+function way(ways){
+    var arr = [];
+    for(var i = 0; i < ways.length; i++){
+        var str = ways[i].instruction.substring(2).split('(');
+        if(str.length>1){
+            arr.push(str[0]);
+        }          
+    }
+
+    var line = '';
+    for( var i = 0; i < arr.length; i++){
+        if(i < (arr.length - 1)){ 
+            line += arr[i] + '->';
+        }else{
+            line += arr[i]
+        }
+    }
+
+    return line;
+}  
+
+</script>
+
+</body>
+</html>

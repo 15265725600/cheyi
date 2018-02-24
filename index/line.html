@@ -1,0 +1,239 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+        <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">查看路线</h1>
+</header>
+<div class="container">
+    
+    <div class="line-wrap">
+        <div class="line-item">
+            <div class="addr-item"><i class="icon-addr"></i>我的位置</div>
+            <div class="addr-item"><i class="icon-circle"></i><span class="aim-address">二环东路124号</span></div>
+            <i class="icon-exchange"></i>     
+        </div>
+        <div class="line-item">
+            <div class="line-way">
+                <a class="icon-bus active" href="#"></a>
+                <a class="icon-carr" href="#"></a>
+                <a class="icon-foot" href="#"></a>
+            </div>   
+        </div>
+    </div>
+
+    <div class="result-wrap">
+        
+    </div>
+    <div id="map">
+    </div>
+</div>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=8cf1a81ed325757401fa24e4822e2c25"></script> 
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    //终点地址   
+    $('.aim-address').html(GetQueryString('address'));
+    
+    
+    var map = new AMap.Map('map');
+    //首页所选择城市
+    var city = getInfo('city_name');
+    //当前经纬度
+    var position = JSON.parse(getInfo('position'));
+    
+    //终点经纬度
+    var aimLng = GetQueryString('lng');
+    var aimLat = GetQueryString('lat');
+
+    //默认公交路线
+    transferLine(map, city, position, aimLng, aimLat);
+
+
+    $('.line-way a').on('click',function(){
+        $('.line-way a').removeClass('active');
+        $(this).addClass('active');
+
+        var index = $(this).index();
+        if(index == 0){ //公交
+            transferLine(map, city, position, aimLng, aimLat);
+        }else if(index == 1){ //驾车
+            driveLine(map, city, position, aimLng, aimLat);
+        }else if(index == 2){ //步行
+            walkLine(map, city, position, aimLng, aimLat);
+        }
+    });
+
+  
+
+});
+
+//公交路线
+function transferLine(map, city, position, aimLng, aimLat){
+    var transferData = [];
+    map.plugin(['AMap.Transfer'],function(){
+
+        var transfer= new AMap.Transfer({
+            city: city,                         //公交城市
+            policy: AMap.TransferPolicy.LEAST_WALK //乘车策略
+        });
+
+        transfer.search(new AMap.LngLat(position.lng, position.lat), new AMap.LngLat(aimLng,aimLat));
+
+        AMap.event.addListener(transfer, 'complete', function(e){
+            if(e.info == 'OK'){
+                var plan = e.plans;
+                var content = '';
+                for( var j = 0; j < plan.length; j++){
+                    var ways = e.plans[j].segments;
+                    transferData.push(ways);
+                    var line = way(ways);
+                    content += '<div class="result-item">'+
+                               '<a href="javascript:location.href=preUrl(\'index/line_map.html?type=1&line_id='+ j +'&lng='+ aimLng +'&lat='+ aimLat +'\')" class="am-block"><span class="way-number">'+ (j + 1) +'</span>'+ line +' <b class="am-fr c-grey">></b></a>'+
+                               '</div>';
+                }
+                    
+                $('.result-wrap').html(content);
+
+                //保存路线信息
+                setInfo('transferData', JSON.stringify(transferData));
+
+            }else{
+                $('.result-wrap').html('没有相关的公交信息');
+            } 
+        });
+    });
+}
+
+//驾车
+function driveLine(map, city, position, aimLng, aimLat){
+    var driveData = [];
+    map.plugin(['AMap.Driving'],function(){
+
+        var drive= new AMap.Driving({
+            city: city,                      //公交城市
+            policy: AMap.DrivingPolicy.LEAST_TIME //驾车策略
+        });
+
+        drive.search(new AMap.LngLat(position.lng, position.lat), new AMap.LngLat(aimLng, aimLat));
+
+        AMap.event.addListener(drive, 'complete', function(e){
+            if(e.info == 'OK'){
+                console.log(e.routes[0]);
+                driveData.push( e.routes[0]);
+                //保存路线信息
+                setInfo('driveData', JSON.stringify(driveData));
+                
+                var line = e.routes[0].steps[0].instruction;
+                var content = '<div class="result-item">'+
+                               '<a href="javascript:location.href=preUrl(\'index/line_map.html?type=2&lng='+ aimLng +'&lat='+ aimLat +'\')" class="am-block"><span class="way-number">01</span>'+ line +' <b class="am-fr c-grey">></b></a>'+
+                               '</div>';
+                    
+                $('.result-wrap').html(content);
+
+                
+
+            } else{
+                $('.result-wrap').html(e.info);
+            }
+                 
+        });
+    });
+}
+
+
+//步行
+function walkLine(map, city, position, aimLng, aimLat){
+    var walkData = [];
+    map.plugin(['AMap.Walking'],function(){
+
+        var walk= new AMap.Walking({
+            city: city                      //公交城市
+        });
+
+        walk.search(new AMap.LngLat(position.lng, position.lat), new AMap.LngLat(aimLng, aimLat));
+
+        AMap.event.addListener(walk, 'complete', function(e){
+            console.log(e);
+            if(e.info == 'ok'){
+                walkData.push( e.routes[0]);
+                var line = e.routes[0].steps[0].instruction;
+                var content = '<div class="result-item">'+
+                               '<a href="javascript:location.href=preUrl(\'index/line_map.html?type=3&lng='+ aimLng +'&lat='+ aimLat +'\')" class="am-block"><span class="way-number">01</span>'+ line +' <b class="am-fr c-grey">></b></a>'+
+                               '</div>';
+                    
+                $('.result-wrap').html(content);
+
+                //保存路线信息
+                setInfo('walkData', JSON.stringify(walkData));
+
+            }else{
+                $('.result-wrap').html(e.info);
+            }    
+        });
+    });
+}
+    
+
+//公交车每一条路线的公交车
+function way(ways){
+    var arr = [];
+    for(var i = 0; i < ways.length; i++){
+        var str = ways[i].instruction.substring(2).split('(');
+        if(str.length>1){
+            arr.push(str[0]);
+        }          
+    }
+
+    var line = '';
+    for( var i = 0; i < arr.length; i++){
+        if(i < (arr.length - 1)){ 
+            line += arr[i] + '->';
+        }else{
+            line += arr[i]
+        }
+    }
+
+    return line;
+}
+
+
+    
+
+</script>
+
+</body>
+</html>

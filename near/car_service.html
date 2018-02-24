@@ -1,0 +1,128 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">汽车服务</h1>
+</header>
+<div class="container" id="content">
+    <div>
+        <img style="width: 100%" src="../assets/i/d1.jpg">
+        <div class="secure-name">中国石油济南第2加气站</div>
+    </div>
+    <!-- 公司简介： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>商家简介：</h4>
+            <p>中国石油天然气股份有限公司是中国油气行业占主导地位的最大的油气生产和销售商，是中国销售收入最大的公司之一，也是世界最大的石油公*2</p>
+            <img src="../assets/i/d1.jpg">
+        </div>  
+    </div>
+    
+
+    <div class="base-wrap">
+        <div class="base-item">
+            <a class="am-block" href="tel:15100001234">
+                <i class="icon-phone"></i>
+                <span>15100001234</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 商家服务： -->
+    <div class="base-wrap">
+        <div class="gas-intro">
+            <h4>商家服务：</h4>
+            <div>1. 汽车维修</div>
+            <p>中国石油天然气股份有限公司是中国油气行业占主导地位的最大的油气生产和销售商，是中国销售收入最大的公司之一，也是世界最大的石油公*2</p>
+            <img src="../assets/i/d1.jpg">
+        </div>  
+    </div>
+
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+<script type="text/html" id="service_detail">
+    {{if exist==0}}
+        <div class="am-margin-top-xl am-text-center">无汽车服务数据</div>
+    {{else}}
+        <div>
+            <img style="width: 100%" src="{{img}}">
+            <div class="secure-name">{{name}}</div>
+        </div>
+        <!-- 公司简介： -->
+        <div class="base-wrap">
+            <div class="gas-intro">
+                <h4>商家简介：</h4>
+                <div>{{brief}}</div>
+            </div>  
+        </div>
+        
+
+        <div class="base-wrap">
+            <div class="base-item">
+                <a class="am-block" href="tel:{{phone}}">
+                    <i class="icon-phone"></i>
+                    <span>{{phone}}</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- 商家服务： -->
+        <div class="base-wrap">
+            <div class="gas-intro">
+                <h4>商家服务：</h4>
+                <iframe src="http://124.128.23.74:8010/hmapi_cheyi/v100/html?type=3&id={{id}}"></iframe>
+            </div>  
+        </div>
+    {{/if}}
+</script>
+<script type="text/javascript">
+$(function(){
+    $.ajax({
+        type: 'post',
+        url: reqUrl('car_service'),
+        dataType : "json",  
+        data: {
+            id: GetQueryString('id'),
+        },
+        success: function(data){
+            console.log(data.msg);
+            var html = template('service_detail', data.infor[0]);
+            $('#content').html(html);
+        }
+    });
+})
+</script>
+</body>
+</html>

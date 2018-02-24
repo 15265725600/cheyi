@@ -1,0 +1,133 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>车驿</title>
+  <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="../assets/css/hm_cy.css">
+</head> 
+<body> 
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+<header data-am-widget="header" class="am-header cy-header n-border"> 
+    <div class="am-header-left am-header-nav">
+      <a class="icon-back" href="javascript:history.back()"></a>
+    </div> 
+    <h1 class="am-header-title">搜索结果</h1>
+</header>
+<div class="container">    
+
+    <!-- 商品列表 -->
+    <ul class="am-avg-sm-2 goods-wrap">
+        <!-- <li>
+            <a class="am-block goods-item" href="#">
+                <div class="station-img">
+                    <img src="../assets/i/c1.jpg">
+                    <p><span>已售 <b>155</b></span> <span class="c-orange am-fr">库存 <b>500</b></span></p>
+                </div>
+                <div class="am-padding-xs">
+                    <h4 class="am-text-truncate">马瑞利SN级5w-40全合成汽车 机油发动</h4>
+                    <div class="am-text-default">50积分</div>
+                    <span class="am-text-xs c-grey">非浓缩</span>
+                </div>
+            </a>
+        </li> -->
+    </ul>
+</div>
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="../assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="../assets/js/amazeui.min.js"></script>
+<script src="../assets/js/dropload.min.js"></script>
+<script src="../assets/js/template.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script src="../assets/js/hm_cy.js"></script>
+
+<script type="text/html" id="goods-item">
+    {{each listItems as goods i}}
+        <li>
+            <a class="am-block goods-item" href="javascript:location.href=preUrl('find/goods_detail.html?id={{goods.id}}')">
+                <div class="station-img">
+                    <img src="{{goods.img}}">
+                    <p><span>已售 <b>{{goods.sales}}</b></span> <span class="c-orange am-fr">库存 <b>{{goods.count}}</b></span></p>
+                </div>
+                <div class="am-padding-xs">
+                    <h4 class="am-text-truncate">{{goods.goods_name}}</h4>
+                    <div class="am-text-default">￥{{goods.price}}</div>
+                    <span class="am-text-xs c-grey">{{goods.property}}</span>
+                </div>
+            </a>
+        </li>
+    {{/each}}
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+    //获取搜索商品列表
+    var page = 0;
+    var $dropload = $('.container').dropload({
+        scrollArea: window,
+        domDown : {
+            domNoData  : '<div class="dropload-noData">没有更多</div>'
+        },
+        loadDownFn : function(me){
+            $.ajax({
+                type: 'post',
+                url: reqUrl('exchange_goods_list'),
+                dataType : "json",  
+                data: {
+                    keyword: GetQueryString('keyword'),
+                    page: page
+                },
+                success: function(data){
+                    if(data.success){
+                        page ++;
+                        var arrLen = data.infor.listItems.length;
+
+                        if(arrLen > 0){                                                
+                            //预编译模板
+                            var html =  template('goods-item', data.infor);
+        
+                        }else{
+
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+
+                        $('.goods-wrap').append(html);
+
+                        me.resetload();
+                    }else{
+                        mask(data.msg);
+                    }
+                }
+            });
+        }
+        
+    });
+   
+    
+
+})
+</script>
+</body>
+</html>
